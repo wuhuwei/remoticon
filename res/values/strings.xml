@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FragmentTabs</string>
-    <string name="tab_words">Words</string>
-    <string name="tab_numbers">Numbers</string>
+    <string name="app_name">Remoticon</string>
+    <string name="remote_label">Remote</string>
+    <string name="guide_label">Guide</string>
+    <string name="favorites_label">Favorites</string>
+    <string name="explore_label">Explore</string>
 </resources>

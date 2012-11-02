@@ -1,18 +1,14 @@
 package edu.berkeley.remoticon;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-
-
-/**
- * @author mwho
- *
- */
 public class RemoteFragment extends Fragment {
 	/** (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
@@ -31,4 +27,17 @@ public class RemoteFragment extends Fragment {
         }
 		return (LinearLayout)inflater.inflate(R.layout.remote_layout, container, false);
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        
+        Activity activity = getActivity();
+        
+        if (activity != null) {
+            TextView foo = (TextView) activity.findViewById(R.id.test_foo);
+            foo.setText("hai");
+        }
+    }
+	
 }

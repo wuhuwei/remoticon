@@ -2,6 +2,11 @@ package edu.berkeley.remoticon;
 
 import java.util.HashMap;
 
+import edu.berkeley.remoticon.ExploreFragment;
+import edu.berkeley.remoticon.FavoritesFragment;
+import edu.berkeley.remoticon.GuideFragment;
+import edu.berkeley.remoticon.RemoteFragment;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,16 +16,16 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 
-/**
- * @author mwho
- * 
- */
 public class TabsFragmentActivity extends FragmentActivity implements
 		TabHost.OnTabChangeListener {
 
 	private TabHost mTabHost;
 	private HashMap mapTabInfo = new HashMap();
 	private TabInfo mLastTab = null;
+	private final String REMOTE_TAB = "remote";
+	private final String GUIDE_TAB = "guide";
+	private final String FAVORITES_TAB = "favorites";
+	private final String EXPLORE_TAB = "explore";
 
 	private class TabInfo {
 		private String tag;
@@ -71,16 +76,10 @@ public class TabsFragmentActivity extends FragmentActivity implements
 		// Step 1: Inflate layout
 		setContentView(R.layout.tab_layout);
 		// Step 2: Setup TabHost
-		initialiseTabHost(savedInstanceState);
+		initializeTabHost(savedInstanceState);
 		if (savedInstanceState != null) {
-			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); // set
-																				// the
-																				// tab
-																				// as
-																				// per
-																				// the
-																				// saved
-																				// state
+			// set the tab as per the saved state
+			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); 
 		}
 	}
 
@@ -90,36 +89,36 @@ public class TabsFragmentActivity extends FragmentActivity implements
 	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
 	 */
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putString("tab", mTabHost.getCurrentTabTag()); // save the tab
-																// selected
+		// save the selected tab
+		outState.putString("tab", mTabHost.getCurrentTabTag()); 
 		super.onSaveInstanceState(outState);
 	}
 
 	/**
 	 * Step 2: Setup TabHost
 	 */
-	private void initialiseTabHost(Bundle args) {
+	private void initializeTabHost(Bundle args) {
 		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
 		mTabHost.setup();
 		TabInfo tabInfo = null;
 		TabsFragmentActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec("Tab1").setIndicator("Remote"),
-				(tabInfo = new TabInfo("Tab1", RemoteFragment.class, args)));
+				.newTabSpec(REMOTE_TAB).setIndicator(getString(R.string.remote_label)),
+				(tabInfo = new TabInfo(REMOTE_TAB, RemoteFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		TabsFragmentActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec("Tab2").setIndicator("Guide"),
-				(tabInfo = new TabInfo("Tab2", GuideFragment.class, args)));
+				.newTabSpec(GUIDE_TAB).setIndicator(getString(R.string.guide_label)),
+				(tabInfo = new TabInfo(GUIDE_TAB, GuideFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		TabsFragmentActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec("Tab3").setIndicator("Favorites"),
-				(tabInfo = new TabInfo("Tab3", FavoritesFragment.class, args)));
+				.newTabSpec(FAVORITES_TAB).setIndicator(getString(R.string.favorites_label)),
+				(tabInfo = new TabInfo(FAVORITES_TAB, FavoritesFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		TabsFragmentActivity.addTab(this, this.mTabHost, this.mTabHost
-				.newTabSpec("Tab4").setIndicator("Explore"),
-				(tabInfo = new TabInfo("Tab4", ExploreFragment.class, args)));
+				.newTabSpec(EXPLORE_TAB).setIndicator(getString(R.string.explore_label)),
+				(tabInfo = new TabInfo(EXPLORE_TAB, ExploreFragment.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		// Default to first tab
-		this.onTabChanged("Tab1");
+		this.onTabChanged(REMOTE_TAB);
 		//
 		mTabHost.setOnTabChangedListener(this);
 	}

@@ -5,4 +5,11 @@
   android:layout_height="fill_parent"
   android:background="#FF0000"
   >
+
+    <TextView
+        android:id="@+id/test_foo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
 </LinearLayout>
