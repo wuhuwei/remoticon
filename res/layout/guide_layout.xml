@@ -30,11 +30,10 @@
 
     </LinearLayout>
 
-    <GridView
-        android:id="@+id/listingGrid"
+    <ListView
+        android:id="@+id/guideView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="3" >
-    </GridView>
+        android:layout_height="wrap_content" >
+    </ListView>
   
 </LinearLayout>

@@ -8,15 +8,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 public class RoviApiHandler {
-	private final String USERNAME = "weitogo";
-	private final String PASSWORD = "h3lloworld";
+	// This is really secure - Justin
 	private final String API_KEY = "6gckp829sp22xcn3puqqsbrc";
 	private final String SECRET = "ZpKXWqxauS";
 
@@ -65,7 +66,7 @@ public class RoviApiHandler {
 		urlTemplate = urlTemplate.replace("%ZIP%", zipcode);
 		urlTemplate = urlTemplate.replace("%KEY%", API_KEY);
 		urlTemplate = urlTemplate.replace("%SIG%", signRequest());
-
+		System.out.println(urlTemplate);
 		try {
 			URL apiURL = new URL(urlTemplate);
 			HttpURLConnection connection = (HttpURLConnection) apiURL
@@ -73,13 +74,12 @@ public class RoviApiHandler {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					connection.getInputStream()));
 			JSONObject response = readResponse(in);
-			JSONObject services = (JSONObject)((JSONObject) response.get("ServicesResult")).get("Services");
+			JSONObject services = (JSONObject)((JSONObject)response.get("ServicesResult")).get("Services");
 			return (JSONArray)services.get("Service");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
-		}
-
+		} 
 		/*
 		 * try {
 		 * 
@@ -144,12 +144,12 @@ public class RoviApiHandler {
 
 	}
 
-	public JSONArray getListings(String serviceID) {
-		String urlTemplate = "http://api.rovicorp.com/TVlistings/v9/listings/linearschedule/%SERVICEID%/info?locale=en-US&oneairingpersourceid=true&apikey=%KEY%&sig=%SIG%";
+	public ArrayList<TVGuideEntry> getListings(String serviceID) {
+		String urlTemplate = "http://api.rovicorp.com/TVlistings/v9/listings/linearschedule/%SERVICEID%/info?locale=en-US&duration=60&inprogress=true&apikey=%KEY%&sig=%SIG%";
 		urlTemplate = urlTemplate.replace("%SERVICEID%", serviceID);
 		urlTemplate = urlTemplate.replace("%KEY%", API_KEY);
 		urlTemplate = urlTemplate.replace("%SIG%", signRequest());
-
+		System.out.println(urlTemplate);
 		try {
 			URL apiURL = new URL(urlTemplate);
 			HttpURLConnection connection = (HttpURLConnection) apiURL
@@ -157,18 +157,49 @@ public class RoviApiHandler {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					connection.getInputStream()));
 			JSONObject response = readResponse(in);
-			JSONObject schedule = (JSONObject)((JSONObject) response.get("LinearScheduleResult")).get("Schedule");
-			return (JSONArray)schedule.get("Airings");
-		} catch (IOException e) {
+			JSONObject schedule = (JSONObject)((JSONObject)response.get("LinearScheduleResult")).get("Schedule");
+			JSONArray shows = (JSONArray) schedule.get("Airings");
+			ArrayList<TVGuideEntry> guideEntries = new ArrayList<TVGuideEntry>();
+			for(int i = 0; i < shows.size(); i++) {
+				JSONObject show = (JSONObject)shows.get(i);
+				System.out.println(show);
+				Show s = new Show();
+				String seriesId = (String)show.get("SeriesId");
+				if(seriesId != null) {
+					s.setId(Integer.parseInt(seriesId));
+				} 
+				s.setName((String)show.get("Title"));
+				s.setEpisodeTitle((String)show.get("EpisodeTitle"));
+				s.setDescription((String)show.get("Copy"));
+				s.setRating((String)show.get("TVRating"));
+				s.setCategory((String)show.get("Category"));
+				s.setSubcategory((String)show.get("Subcategory"));
+				
+				Channel c = new Channel();
+				c.setAbbr((String)show.get("CallLetters"));
+				c.setFullName((String)show.get("SourceLongName"));
+				c.setId(((Long)show.get("SourceId")).intValue());
+				c.setNumber(Integer.parseInt((String)show.get("Channel")));
+				
+				String time = (String)show.get("AiringTime");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+				Date airingTime = sdf.parse(time);
+				
+				TVGuideEntry e = new TVGuideEntry(c, s, airingTime);
+				guideEntries.add(e);
+			}
+			return guideEntries;
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+		
 	}
 	
 	public static void main(String[] args) {
 		RoviApiHandler testHandler = new RoviApiHandler();
-		testHandler.getProviders("94709");
-		System.out.println(testHandler.getListings("360861"));
+		//System.out.println(testHandler.getProviders("94709"));
+		System.out.println(testHandler.getListings("76550"));
 
 	}
 }

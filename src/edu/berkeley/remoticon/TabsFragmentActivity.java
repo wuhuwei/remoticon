@@ -9,6 +9,7 @@ import edu.berkeley.remoticon.RemoteFragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -81,6 +82,9 @@ public class TabsFragmentActivity extends FragmentActivity implements
 			// set the tab as per the saved state
 			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); 
 		}
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy); 
 	}
 
 	/**
