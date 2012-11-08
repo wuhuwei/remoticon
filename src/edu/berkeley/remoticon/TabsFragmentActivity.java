@@ -82,9 +82,6 @@ public class TabsFragmentActivity extends FragmentActivity implements
 			// set the tab as per the saved state
 			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); 
 		}
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-        StrictMode.setThreadPolicy(policy); 
 	}
 
 	/**

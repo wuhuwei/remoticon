@@ -10,11 +10,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+
+import android.util.Log;
 
 public class RoviApiHandler {
 	// This is really secure - Justin
@@ -44,9 +48,8 @@ public class RoviApiHandler {
 	}
 	
 	private JSONObject readResponse(BufferedReader in) {
-		String response;
+		String response = "";
 		try {
-			response = "";
 			String line;
 			while ((line = in.readLine()) != null) {
 				response += line;
@@ -54,10 +57,9 @@ public class RoviApiHandler {
 			return (JSONObject)JSONValue.parse(response);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
 	
 	
@@ -144,9 +146,10 @@ public class RoviApiHandler {
 
 	}
 
-	public ArrayList<TVGuideEntry> getListings(String serviceID) {
-		String urlTemplate = "http://api.rovicorp.com/TVlistings/v9/listings/linearschedule/%SERVICEID%/info?locale=en-US&duration=60&inprogress=true&apikey=%KEY%&sig=%SIG%";
+	public ArrayList<TVGuideEntry> getListings(String serviceID, String startTime) {
+		String urlTemplate = "http://api.rovicorp.com/TVlistings/v9/listings/gridschedule/%SERVICEID%/info?locale=en-US&duration=60&inprogress=true&startdate=%START%&apikey=%KEY%&sig=%SIG%";
 		urlTemplate = urlTemplate.replace("%SERVICEID%", serviceID);
+		urlTemplate = urlTemplate.replace("%START%", startTime);
 		urlTemplate = urlTemplate.replace("%KEY%", API_KEY);
 		urlTemplate = urlTemplate.replace("%SIG%", signRequest());
 		System.out.println(urlTemplate);
@@ -157,49 +160,66 @@ public class RoviApiHandler {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					connection.getInputStream()));
 			JSONObject response = readResponse(in);
-			JSONObject schedule = (JSONObject)((JSONObject)response.get("LinearScheduleResult")).get("Schedule");
-			JSONArray shows = (JSONArray) schedule.get("Airings");
+			JSONArray channels = (JSONArray)((JSONObject)response.get("GridScheduleResult")).get("GridChannels");
 			ArrayList<TVGuideEntry> guideEntries = new ArrayList<TVGuideEntry>();
-			for(int i = 0; i < shows.size(); i++) {
-				JSONObject show = (JSONObject)shows.get(i);
-				System.out.println(show);
-				Show s = new Show();
-				String seriesId = (String)show.get("SeriesId");
-				if(seriesId != null) {
-					s.setId(Integer.parseInt(seriesId));
-				} 
-				s.setName((String)show.get("Title"));
-				s.setEpisodeTitle((String)show.get("EpisodeTitle"));
-				s.setDescription((String)show.get("Copy"));
-				s.setRating((String)show.get("TVRating"));
-				s.setCategory((String)show.get("Category"));
-				s.setSubcategory((String)show.get("Subcategory"));
-				
+			for(int i = 0; i < channels.size(); i++) {
+				JSONObject channel = (JSONObject)channels.get(i);
 				Channel c = new Channel();
-				c.setAbbr((String)show.get("CallLetters"));
-				c.setFullName((String)show.get("SourceLongName"));
-				c.setId(((Long)show.get("SourceId")).intValue());
-				c.setNumber(Integer.parseInt((String)show.get("Channel")));
+				c.setAbbr((String)channel.get("CallLetters"));
+				c.setFullName((String)channel.get("SourceLongName"));
+				c.setId(((Long)channel.get("SourceId")).intValue());
+				c.setNumber(Integer.parseInt((String)channel.get("Channel")));
+				if(channel.get("Channel") == null) {
+					System.out.println("wtfff" + channel.get("SourceLongName"));
+				}
 				
-				String time = (String)show.get("AiringTime");
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-				Date airingTime = sdf.parse(time);
+				JSONArray shows = (JSONArray)channel.get("Airings");
+				ArrayList<Show> channelShows = new ArrayList<Show>();
+				for(int j = 0; j < shows.size(); j++){
+					JSONObject show = (JSONObject)shows.get(j);
+					
+					Show s = new Show();
+					String seriesId = (String)show.get("SeriesId");
+					if(seriesId != null) {
+						s.setId(Integer.parseInt(seriesId));
+					} 
+					String time = (String)show.get("AiringTime");
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+					Date airingTime = sdf.parse(time);					
+					s.setAiringTime(airingTime);
+					s.setName((String)show.get("Title"));
+					s.setEpisodeTitle((String)show.get("EpisodeTitle"));
+					s.setDescription((String)show.get("Copy"));
+					s.setRating((String)show.get("TVRating"));
+					s.setCategory((String)show.get("Category"));
+					s.setSubcategory((String)show.get("Subcategory"));
+					channelShows.add(s);
+				}
 				
-				TVGuideEntry e = new TVGuideEntry(c, s, airingTime);
+				
+				
+				
+				TVGuideEntry e = new TVGuideEntry(c, channelShows);
 				guideEntries.add(e);
 			}
+			Collections.sort(guideEntries);
 			return guideEntries;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
 	
 	public static void main(String[] args) {
 		RoviApiHandler testHandler = new RoviApiHandler();
-		//System.out.println(testHandler.getProviders("94709"));
-		System.out.println(testHandler.getListings("76550"));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:00'Z'");
+    	Date now = new Date();
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTime(now);
+    	calendar.add(Calendar.MINUTE, -(calendar.get(Calendar.MINUTE) % 30));
+    	System.out.println(sdf.format(calendar.getTime()));
+		//System.out.println(testHandler.getProviders("94709"));\
+		System.out.println(testHandler.getListings("76550", "2012-11-06T05:00:00Z"));
 
 	}
 }
