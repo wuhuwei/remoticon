@@ -8,9 +8,9 @@ import android.os.Parcelable;
 
 public class TVGuideEntry implements Comparable<TVGuideEntry>, Parcelable{
 	private Channel channel;
-	private ArrayList<Show> shows;
+	private ArrayList<Program> shows;
 	
-	public TVGuideEntry(Channel channel, ArrayList<Show> shows) {
+	public TVGuideEntry(Channel channel, ArrayList<Program> shows) {
 		this.channel = channel;
 		this.shows = shows;
 	
@@ -23,11 +23,11 @@ public class TVGuideEntry implements Comparable<TVGuideEntry>, Parcelable{
 		this.channel = channel;
 	}
 	
-	public ArrayList<Show> getShows() {
+	public ArrayList<Program> getShows() {
 		return shows;
 	}
 	
-	public void setShows(ArrayList<Show> shows) {
+	public void setShows(ArrayList<Program> shows) {
 		this.shows = shows;
 	}
 
@@ -50,17 +50,17 @@ public class TVGuideEntry implements Comparable<TVGuideEntry>, Parcelable{
 	
 	public void readFromParcel(Parcel in) {
 		this.setChannel((Channel)in.readParcelable(Channel.class.getClassLoader()));
-		in.readList(shows, Show.class.getClassLoader());
+		in.readList(shows, Program.class.getClassLoader());
 		
 	}
 	
-	public static final Parcelable.Creator<Show> CREATOR = new Parcelable.Creator<Show> () {
-		public Show createFromParcel(Parcel in) {
-			return new Show(in);
+	public static final Parcelable.Creator<Program> CREATOR = new Parcelable.Creator<Program> () {
+		public Program createFromParcel(Parcel in) {
+			return new Program(in);
 		}
 		
-		public Show[] newArray(int size) {
-			return new Show[size];
+		public Program[] newArray(int size) {
+			return new Program[size];
 		}
 	};
 	

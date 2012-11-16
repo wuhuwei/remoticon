@@ -10,9 +10,9 @@ import edu.berkeley.remoticon.RemoteFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import android.app.FragmentTransaction;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
@@ -140,10 +140,10 @@ public class TabsFragmentActivity extends FragmentActivity implements
 		// Check to see if we already have a fragment for this tab, probably
 		// from a previously saved state. If so, deactivate it, because our
 		// initial state is that a tab isn't shown.
-		tabInfo.fragment = activity.getSupportFragmentManager()
+		tabInfo.fragment = activity.getFragmentManager()
 				.findFragmentByTag(tag);
 		if (tabInfo.fragment != null && !tabInfo.fragment.isDetached()) {
-			FragmentTransaction ft = activity.getSupportFragmentManager()
+			FragmentTransaction ft = activity.getFragmentManager()
 					.beginTransaction();
 			ft.detach(tabInfo.fragment);
 			ft.commit();
@@ -161,7 +161,7 @@ public class TabsFragmentActivity extends FragmentActivity implements
 	public void onTabChanged(String tag) {
 		TabInfo newTab = (TabInfo) this.mapTabInfo.get(tag);
 		if (mLastTab != newTab) {
-			FragmentTransaction ft = this.getSupportFragmentManager()
+			FragmentTransaction ft = this.getFragmentManager()
 					.beginTransaction();
 			if (mLastTab != null) {
 				if (mLastTab.fragment != null) {

@@ -174,11 +174,11 @@ public class RoviApiHandler {
 				}
 				
 				JSONArray shows = (JSONArray)channel.get("Airings");
-				ArrayList<Show> channelShows = new ArrayList<Show>();
+				ArrayList<Program> channelShows = new ArrayList<Program>();
 				for(int j = 0; j < shows.size(); j++){
 					JSONObject show = (JSONObject)shows.get(j);
 					
-					Show s = new Show();
+					Program s = new Program();
 					String seriesId = (String)show.get("SeriesId");
 					if(seriesId != null) {
 						s.setId(Integer.parseInt(seriesId));
@@ -189,7 +189,6 @@ public class RoviApiHandler {
 					s.setAiringTime(airingTime);
 					s.setName((String)show.get("Title"));
 					s.setEpisodeTitle((String)show.get("EpisodeTitle"));
-					s.setDescription((String)show.get("Copy"));
 					s.setRating((String)show.get("TVRating"));
 					s.setCategory((String)show.get("Category"));
 					s.setSubcategory((String)show.get("Subcategory"));
@@ -210,6 +209,41 @@ public class RoviApiHandler {
 		}
 	}
 	
+	public Show getShow(String serviceID, String seriesID) {
+		String urlTemplate = "http://api.rovicorp.com/TVlistings/v9/listings/programdetails/%%SERVICE%%/%%SERIES%%/info?locale=en-US&copytextformat=PlainText&duration=10080&imagecount=5&include=Program&inprogress=0&pagesize=0&format=json&apikey=%%KEY%%&sig=%%SIG%%";
+		urlTemplate = urlTemplate.replace("%%SERVICE%%", serviceID);
+		urlTemplate = urlTemplate.replace("%%SERIES%%", seriesID);
+		urlTemplate = urlTemplate.replace("%%KEY%%", API_KEY);
+		urlTemplate = urlTemplate.replace("%%SIG%%", signRequest());
+		System.out.println(urlTemplate);
+		try {
+			URL apiURL = new URL(urlTemplate);
+			HttpURLConnection connection = (HttpURLConnection) apiURL
+					.openConnection();
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			JSONObject response = readResponse(in);
+			JSONObject programDetails = (JSONObject)((JSONObject)response.get("ProgramDetailsResult")).get("Program");
+			String showDescription = (String)programDetails.get("CopyText");
+			
+			JSONArray airings = (JSONArray)((JSONObject)((JSONObject)response.get("ProgramDetailsResult")).get("Schedule")).get("Airings");
+			
+			ArrayList<Airing> nextAirings = new ArrayList<Airing>();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+			System.out.println(showDescription);
+			for(int i = 0; i < airings.size() && i < 5; i++) {
+				JSONObject airing = (JSONObject)airings.get(i);
+				Episode e = new Episode(Integer.parseInt((String)airing.get("ProgramId")), Integer.parseInt(seriesID), (String)airing.get("Title"), (String)airing.get("Copy"));
+				Airing a = new Airing(e, sdf.parse((String)airing.get("AiringTime")));
+				nextAirings.add(a);
+			}
+			return new Show(showDescription, nextAirings);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static void main(String[] args) {
 		RoviApiHandler testHandler = new RoviApiHandler();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:00'Z'");
@@ -219,7 +253,8 @@ public class RoviApiHandler {
     	calendar.add(Calendar.MINUTE, -(calendar.get(Calendar.MINUTE) % 30));
     	System.out.println(sdf.format(calendar.getTime()));
 		//System.out.println(testHandler.getProviders("94709"));\
-		System.out.println(testHandler.getListings("76550", "2012-11-06T05:00:00Z"));
+		//System.out.println(testHandler.getListings("76550", "2012-11-06T05:00:00Z"));
+    	System.out.println(testHandler.getShow("76550", "8128"));
 
 	}
 }
