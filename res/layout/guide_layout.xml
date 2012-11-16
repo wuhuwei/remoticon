@@ -30,41 +30,65 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/prevButton"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:gravity="center_vertical|center_horizontal"
             android:text="&lt;&lt;" />
 
-        <TextView
-            android:id="@+id/time1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="TextView"
-            android:textSize="10pt" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1" >
 
-        <TextView
-            android:id="@+id/time2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="TextView"
-            android:textSize="10pt" />
+         <TextView
+             android:id="@+id/time1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:layout_weight="0.5"
+             android:paddingLeft="10dip"
+             android:text="TextView"
+             android:textSize="10pt" />
 
-        <Button
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=">>" />
+             <RelativeLayout
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight="0.5">
+
+                  <TextView
+                      android:id="@+id/time2"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerVertical="true"
+                      android:paddingLeft="10dip"
+                      android:text="TextView"
+                      android:textSize="10pt" />
+
+                 <Button
+                     android:id="@+id/nextButton"
+                     android:layout_width="60dp"
+                     android:layout_height="wrap_content"
+                     android:text=">>"
+                     android:layout_alignParentRight="true" />
+                 
+             </RelativeLayout>
+
+            
+
+     
+
+       
+            
+        </LinearLayout>
+
+      
 
     </LinearLayout>
 

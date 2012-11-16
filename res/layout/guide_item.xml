@@ -7,42 +7,49 @@
     <LinearLayout
         android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginRight="10dp"
         android:orientation="vertical" >
 
-          <TextView
-        android:id="@+id/channelAbbrev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Channel"
-        android:textSize="8pt"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/channelAbbrev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Channel"
+            android:textSize="8pt"
+            android:textStyle="bold" />
 
-	    <TextView
-	        android:id="@+id/channelNum"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Channel number"
-	        android:textAppearance="?android:attr/textAppearanceSmall"
-	        android:textColor="#6a6a6a" />
+        <TextView
+            android:id="@+id/channelNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Channel number"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#6a6a6a" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/show1_label"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|clip_horizontal"
-        android:layout_weight="1"
-        android:text="TextView"
-        android:textSize="10pt" />
+        android:weightSum="1" >
 
-    <TextView
-        android:id="@+id/show2_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|clip_horizontal"
-        android:layout_weight="1"
-        android:text="TextView"
-        android:textSize="10pt" />
+        <TextView
+            android:id="@+id/show1_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|clip_horizontal"
+            android:layout_weight="0.5"
+            android:text="TextView"
+            android:textSize="10pt" />
+
+        <TextView
+            android:id="@+id/show2_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|clip_horizontal"
+            android:layout_weight="0.5"
+            android:text="TextView"
+            android:textSize="10pt" />
+    </LinearLayout>
 
 </LinearLayout>

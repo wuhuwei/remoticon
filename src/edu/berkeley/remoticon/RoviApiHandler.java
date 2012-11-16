@@ -230,7 +230,6 @@ public class RoviApiHandler {
 			
 			ArrayList<Airing> nextAirings = new ArrayList<Airing>();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-			System.out.println(showDescription);
 			for(int i = 0; i < airings.size() && i < 5; i++) {
 				JSONObject airing = (JSONObject)airings.get(i);
 				Episode e = new Episode(Integer.parseInt((String)airing.get("ProgramId")), Integer.parseInt(seriesID), (String)airing.get("Title"), (String)airing.get("Copy"));
