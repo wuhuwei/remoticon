@@ -8,14 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class InitialActivity extends FragmentActivity {
+public class InitialActivity extends Activity {
 	private BluetoothAdapter mBTAdapter;
     
 	private String mConnectedDeviceName = null;
@@ -25,6 +24,7 @@ public class InitialActivity extends FragmentActivity {
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
+    private static final int SELECT_TV_DEVICE = 3;
 
     // The Handler that gets information back from the BluetoothChatService
     private final Handler mHandler = new BTHandler();
@@ -42,6 +42,7 @@ public class InitialActivity extends FragmentActivity {
     private TextView btStatusText;
     private Button btConnectBtn;
     private Button deviceSelectBtn;
+    private TextView tvSelectStatusText;
     private ProgressDialog connectingBar;
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,6 @@ public class InitialActivity extends FragmentActivity {
         btStatusText = (TextView) findViewById(R.id.btStatusText);
         btStatusText.setVisibility(View.INVISIBLE);
         btConnectBtn = (Button) findViewById(R.id.bluetoothConnectionBtn);
-        deviceSelectBtn = (Button) findViewById(R.id.findTVBtn);
-        
         btConnectBtn.setOnClickListener(new OnClickListener()
      	{
      		public void onClick(View v)
@@ -76,6 +75,14 @@ public class InitialActivity extends FragmentActivity {
      		}
      	});
         
+        deviceSelectBtn = (Button) findViewById(R.id.findTVBtn);
+        deviceSelectBtn.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v) {
+        		selectTVDevice();
+        	}
+        }); 
+        tvSelectStatusText = (TextView) findViewById(R.id.tvSelectStatus);
+        tvSelectStatusText.setText("Status: None selected");
         connectingBar = new ProgressDialog(this);
         
 	}
@@ -128,6 +135,12 @@ public class InitialActivity extends FragmentActivity {
                 Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
                 finish();
             }
+            break;
+        case SELECT_TV_DEVICE:
+        	if (resultCode == Activity.RESULT_OK) {
+        		tvSelectStatusText.setText("Device: " + data.getStringExtra("deviceName"));
+        	}
+			break;
         }
     }
 	
@@ -146,6 +159,11 @@ public class InitialActivity extends FragmentActivity {
         // Launch the DeviceListActivity to see devices and do scan
         Intent listDevicesIntent = new Intent(this, DeviceListActivity.class);
         startActivityForResult(listDevicesIntent, REQUEST_CONNECT_DEVICE);
+	}
+    
+    public void selectTVDevice() {
+		Intent listTVDevicesIntent = new Intent(this, SelectTVDeviceActivity.class);
+		startActivityForResult(listTVDevicesIntent, SELECT_TV_DEVICE);
 	}
     
 	private class BTHandler extends Handler
@@ -172,6 +190,7 @@ public class InitialActivity extends FragmentActivity {
                     break;
                 }
                 break;
+            
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name
                 mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
