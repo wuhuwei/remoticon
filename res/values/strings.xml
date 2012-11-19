@@ -5,4 +5,22 @@
     <string name="guide_label">Guide</string>
     <string name="favorites_label">Favorites</string>
     <string name="explore_label">Explore</string>
+    <string name="welcome">Welcome to Remoticon!</string>
+    <string name="welcome_description">You will be guided through setting up your new Remoticon device in two steps:\n\n1. Connect to Remoticon\n2. Select your television device </string>
+    
+        <string name="menu_settings">Settings</string>
+    <string name="title_activity_arduino_bt">ArduinoBT</string>
+    <string name="noconnection">No Connection</string>
+    <string name="button1">Button 1</string>
+    <string name="button2">Button 2</string>
+    <string name="button3">Button 3</string>
+    <string name="connect">Connection</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Devices</string>
+    <string name="button_scan">Scan for Devices</string>
+    <string name="none_paired">No Paired Devices</string>
+    <string name="scanning">Scanning</string>
+    <string name="select_device">Select Devices</string>
+    <string name="none_found">No Devices Found</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not Enabled</string>
 </resources>

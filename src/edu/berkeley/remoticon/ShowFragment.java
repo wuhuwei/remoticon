@@ -90,8 +90,11 @@ public class ShowFragment extends Fragment {
 	}
 	
 	private void populateView() {
-		showDescription.setText(info.getDescription());
-		airingsView.setAdapter(new NextAiringsListAdapter(activity, info.getAirings()));
+		if(info != null) {
+			showDescription.setText(info.getDescription());
+			airingsView.setAdapter(new NextAiringsListAdapter(activity, info.getAirings()));
+		}
+		
 	}
 	
 	private class NextAiringsListAdapter extends BaseExpandableListAdapter {
