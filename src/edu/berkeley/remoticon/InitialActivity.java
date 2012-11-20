@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -42,13 +45,25 @@ public class InitialActivity extends Activity {
     private TextView btStatusText;
     private Button btConnectBtn;
     private Button deviceSelectBtn;
+    private Button finishSetupBtn;
     private TextView tvSelectStatusText;
     private ProgressDialog connectingBar;
+    
+    private String deviceName;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setup);
 		
+		// Check if we've already done setup. If so, don't present setup
+        SharedPreferences prefs = getSharedPreferences("edu.berkeley.remoticon", Context.MODE_PRIVATE);
+        if(prefs.getString("deviceName", null) != null) {
+        	Intent i = new Intent(this, MenuActivity.class);
+        	startActivity(i);
+        	finish();		
+        	return;
+        }
+        
 		mBTAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // If the adapter is null, then Bluetooth is not supported
@@ -59,6 +74,8 @@ public class InitialActivity extends Activity {
         }
         
         mBTService = new BluetoothService(this, mHandler);
+        
+        connectingBar = new ProgressDialog(this);
         
         btStatusText = (TextView) findViewById(R.id.btStatusText);
         btStatusText.setVisibility(View.INVISIBLE);
@@ -81,10 +98,27 @@ public class InitialActivity extends Activity {
         		selectTVDevice();
         	}
         }); 
-        tvSelectStatusText = (TextView) findViewById(R.id.tvSelectStatus);
+        tvSelectStatusText = (TextView) findViewById(R.id.tvSelectStatusText);
         tvSelectStatusText.setText("Status: None selected");
-        connectingBar = new ProgressDialog(this);
         
+        finishSetupBtn = (Button) findViewById(R.id.finishSetup);
+        finishSetupBtn.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v) {
+        		if(deviceName == null) {
+        			Toast.makeText(v.getContext(), R.string.tv_device_not_selected, Toast.LENGTH_SHORT).show();
+        			
+        		} else {
+        			SharedPreferences prefs = v.getContext().getSharedPreferences("edu.berkeley.remoticon", Context.MODE_PRIVATE);
+            		SharedPreferences.Editor editor = prefs.edit();
+            		editor.putString("deviceName", deviceName);
+            		editor.commit();
+            		Intent i = new Intent(v.getContext(), MenuActivity.class);
+            		startActivity(i);
+            		InitialActivity.this.finish();
+        		}
+        		
+        	}
+        });
 	}
 	
 	@Override
@@ -138,7 +172,8 @@ public class InitialActivity extends Activity {
             break;
         case SELECT_TV_DEVICE:
         	if (resultCode == Activity.RESULT_OK) {
-        		tvSelectStatusText.setText("Device: " + data.getStringExtra("deviceName"));
+        		deviceName = data.getStringExtra("deviceName");
+        		tvSelectStatusText.setText("Device: " + deviceName);
         	}
 			break;
         }
@@ -165,6 +200,13 @@ public class InitialActivity extends Activity {
 		Intent listTVDevicesIntent = new Intent(this, SelectTVDeviceActivity.class);
 		startActivityForResult(listTVDevicesIntent, SELECT_TV_DEVICE);
 	}
+    
+    public void saveSetup() {
+    	// save preferences
+    	Intent mainMenuIntent = new Intent(this, MenuActivity.class);
+    	startActivity(mainMenuIntent);
+    	finish();
+    }
     
 	private class BTHandler extends Handler
     {

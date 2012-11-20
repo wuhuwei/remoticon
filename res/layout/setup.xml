@@ -22,16 +22,14 @@
         android:layout_marginTop="10dip"
         android:text="@string/welcome_description" />
 
- 
         <Button
             android:id="@+id/bluetoothConnectionBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20px"
             android:layout_gravity="center"
-            android:padding="15dip"
+            android:layout_marginTop="20px"
+          	style="@style/SetupButtons"
             android:text="Connect to Remoticon" />
-
 
     <TextView
         android:id="@+id/btStatusText"
@@ -47,17 +45,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20px"
-        android:padding="15dip"
-        android:text="Find TV Device" />
-
-    <TextView
-        android:id="@+id/tvSelectStatus"
+        android:layout_marginTop="20dip"
+        android:text="Find TV Device"
+       	style="@style/SetupButtons" />
+     <TextView
+        android:id="@+id/tvSelectStatusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="TextView"
         android:textAllCaps="true"
         android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/finishSetup"
+            style="@style/SetupButtons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dip"
+            android:text="Finish Setup" />
+       
+    </RelativeLayout>
 
 </LinearLayout>
