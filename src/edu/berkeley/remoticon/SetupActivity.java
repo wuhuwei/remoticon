@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class InitialActivity extends Activity {
+public class SetupActivity extends Activity {
 	private BluetoothAdapter mBTAdapter;
     
 	private String mConnectedDeviceName = null;
@@ -114,7 +114,7 @@ public class InitialActivity extends Activity {
             		editor.commit();
             		Intent i = new Intent(v.getContext(), MenuActivity.class);
             		startActivity(i);
-            		InitialActivity.this.finish();
+            		SetupActivity.this.finish();
         		}
         		
         	}
