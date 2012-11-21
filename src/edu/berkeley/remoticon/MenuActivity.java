@@ -134,7 +134,7 @@ public class MenuActivity extends FragmentActivity {
 		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
 		super.onSaveInstanceState(outState);
 	}
-
+	
 	private void setupTabs(Bundle savedInstanceState) {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
