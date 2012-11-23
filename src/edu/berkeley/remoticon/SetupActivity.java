@@ -1,5 +1,7 @@
 package edu.berkeley.remoticon;
 
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -50,6 +52,7 @@ public class SetupActivity extends Activity {
     private ProgressDialog connectingBar;
     
     private String deviceName;
+    private HashMap<String, String> remoteCodes;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -108,13 +111,9 @@ public class SetupActivity extends Activity {
         			Toast.makeText(v.getContext(), R.string.tv_device_not_selected, Toast.LENGTH_SHORT).show();
         			
         		} else {
-        			SharedPreferences prefs = v.getContext().getSharedPreferences("edu.berkeley.remoticon", Context.MODE_PRIVATE);
-            		SharedPreferences.Editor editor = prefs.edit();
-            		editor.putString("deviceName", deviceName);
-            		editor.commit();
-            		Intent i = new Intent(v.getContext(), MenuActivity.class);
-            		startActivity(i);
-            		SetupActivity.this.finish();
+        			setupRemoteCodes();
+        			
+            		
         		}
         		
         	}
@@ -173,6 +172,12 @@ public class SetupActivity extends Activity {
         case SELECT_TV_DEVICE:
         	if (resultCode == Activity.RESULT_OK) {
         		deviceName = data.getStringExtra("deviceName");
+        		remoteCodes.put("power", data.getStringExtra("power"));
+        		remoteCodes.put("channelUp", data.getStringExtra("channelUp"));
+        		remoteCodes.put("channelDown", data.getStringExtra("channelDown"));
+        		remoteCodes.put("volumeUp", data.getStringExtra("volumeUp"));
+        		remoteCodes.put("volumeDown", data.getStringExtra("volumeDown"));
+        		
         		tvSelectStatusText.setText("Device: " + deviceName);
         	}
 			break;
@@ -201,8 +206,18 @@ public class SetupActivity extends Activity {
 		startActivityForResult(listTVDevicesIntent, SELECT_TV_DEVICE);
 	}
     
-    public void saveSetup() {
+    public void setupRemoteCodes() {
     	// save preferences
+    	
+    	SharedPreferences prefs = getSharedPreferences("edu.berkeley.remoticon", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString("deviceName", deviceName);
+		editor.putString("power", remoteCodes.get("power"));
+		editor.putString("channelUp", remoteCodes.get("channelUp"));
+		editor.putString("channelDown", remoteCodes.get("channelDown"));
+		editor.putString("volumeUp", remoteCodes.get("volumeUp"));
+		editor.putString("volumeDown", remoteCodes.get("channelUp"));
+		editor.commit();
     	Intent mainMenuIntent = new Intent(this, MenuActivity.class);
     	startActivity(mainMenuIntent);
     	finish();
