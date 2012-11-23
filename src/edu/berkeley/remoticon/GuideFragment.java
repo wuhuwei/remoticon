@@ -8,6 +8,7 @@ import java.util.Date;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,6 +39,13 @@ public class GuideFragment extends Fragment {
 	Date startTime;
 	LayoutInflater mInflater;
 	Calendar calendar;
+	
+	TextView time1;
+	TextView time2;
+	Button nextButton;
+	Button prevButton;
+	
+	ProgressDialog loadingBar;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,8 +76,33 @@ public class GuideFragment extends Fragment {
 					.getParcelableArrayList("listings"));
 		}
 		activity = (MenuActivity) getActivity();
+		loadingBar = new ProgressDialog(activity);
 		mInflater = (LayoutInflater) activity
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		time1 = (TextView) activity.findViewById(R.id.time1);
+		time2 = (TextView) activity.findViewById(R.id.time2);
+		prevButton = (Button) activity.findViewById(R.id.prevButton);
+		nextButton = (Button) activity.findViewById(R.id.nextButton);
+		prevButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				ListingFetcher task = new ListingFetcher();
+				calendar.setTime(startTime);
+				calendar.add(Calendar.HOUR, -1);
+				task.execute(new String[] { "76550",
+						roundedHalfHourFormat.format(calendar.getTime()) });
+			}
+		});
+		
+		nextButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				ListingFetcher task = new ListingFetcher();
+				calendar.setTime(startTime);
+				calendar.add(Calendar.HOUR, 1);
+				task.execute(new String[] { "76550",
+						roundedHalfHourFormat.format(calendar.getTime()) });
+			}
+		});
+		
 		roundedHalfHourFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:00'Z'");
 		calendar = Calendar.getInstance();
 		if (activity != null) {
@@ -86,40 +119,35 @@ public class GuideFragment extends Fragment {
 			calendar.setTime(now);
 			calendar.add(Calendar.MINUTE, -(calendar.get(Calendar.MINUTE) % 30));
 			startTime = calendar.getTime();
+
 			task.execute(new String[] { "76550",
 					roundedHalfHourFormat.format(startTime) });
 		} else {
 			fillGuideTable();
 		}
 
-		Button prevButton = (Button) activity.findViewById(R.id.prevButton);
-		prevButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				ListingFetcher task = new ListingFetcher();
-				calendar.setTime(startTime);
-				calendar.add(Calendar.HOUR, -1);
-				task.execute(new String[] { "76550",
-						roundedHalfHourFormat.format(calendar.getTime()) });
-			}
-		});
-		Button nextButton = (Button) activity.findViewById(R.id.nextButton);
-		nextButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				ListingFetcher task = new ListingFetcher();
-				calendar.setTime(startTime);
-				calendar.add(Calendar.HOUR, 1);
-				task.execute(new String[] { "76550",
-						roundedHalfHourFormat.format(calendar.getTime()) });
-			}
-		});
+		
+		
 
 	}
 
 	private class ListingFetcher extends
 			AsyncTask<String, Void, ArrayList<TVGuideEntry>> {
-
+		
+		@Override
+		protected void onPreExecute() {
+			loadingBar.setMessage("Loading...");
+			loadingBar.show();
+		}
+		
 		@Override
 		protected ArrayList<TVGuideEntry> doInBackground(String... queryInfo) {
+			
+			time1.setVisibility(View.INVISIBLE);
+			time2.setVisibility(View.INVISIBLE);
+			prevButton.setVisibility(View.INVISIBLE);
+			nextButton.setVisibility(View.INVISIBLE);
+			
 			SimpleDateFormat sdf = new SimpleDateFormat(
 					"yyyy-MM-dd'T'HH:mm:ss'Z'");
 			try {
@@ -131,9 +159,10 @@ public class GuideFragment extends Fragment {
 			return activity.getApiHandler().getListings(queryInfo[0], queryInfo[1]);
 		}
 
+		@Override
 		protected void onPostExecute(ArrayList<TVGuideEntry> result) {
 			listings = result;
-
+			loadingBar.dismiss();
 			fillGuideTable();
 		}
 	}
@@ -161,16 +190,20 @@ public class GuideFragment extends Fragment {
 	 * LayoutParams.WRAP_CONTENT)); } }
 	 */
 	private void fillGuideTable() {
+		
+		
 		Calendar calendar;
-		TextView time1 = (TextView) activity.findViewById(R.id.time1);
-		TextView time2 = (TextView) activity.findViewById(R.id.time2);
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		time1.setText(timeFormat.format(startTime));
 		calendar = Calendar.getInstance();
 		calendar.setTime(startTime);
 		calendar.add(Calendar.MINUTE, 30);
 		time2.setText(timeFormat.format(calendar.getTime()));
-
+		time1.setVisibility(View.VISIBLE);
+		time2.setVisibility(View.VISIBLE);
+		prevButton.setVisibility(View.VISIBLE);
+		nextButton.setVisibility(View.VISIBLE);
+		loadingBar.hide();
 		guideAdapter = new GuideItemAdapter(activity, 0, listings, startTime);
 		guide.setAdapter(guideAdapter);
 	}
