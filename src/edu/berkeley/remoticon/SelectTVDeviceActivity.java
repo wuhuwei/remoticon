@@ -1,5 +1,7 @@
 package edu.berkeley.remoticon;
 
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -28,6 +30,11 @@ public class SelectTVDeviceActivity extends Activity {
     
     // hardcoded list of devices currently
     String[] DEVICES = { "Sony", "Samsung", "Panasonic" };
+	String[] SONY_CODES = {
+			"35560,2380,560,1200,580,600,560,1200,580,600,560,1200,580,620,560,600,560,1220,560,620,560,600,560,620,560,620,25300,2380,560,1200,580,600,560,1220,560,600,580,1200,560,600,580,600,580,1200,560,600,580,600,580,600,560,620,25300,2400,540,1200,580,600,580,1180,580,620,560,1200,560,620,560,620,560,1200,560,620,560,620,560,600,580,600", // power button
+			"6088,2380,580,1200,560,1200,560,620,560,620,560,1200,560,620,560,600,580,1200,560,620,560,620,560,620,560,600,25300,2380,600,1180,580,1180,600,580,580,600,580,1180,600,580,580,600,580,1180,600,580,580,600,580,580,600,580,25300,2400,580,1180,580,1200,580,580,600,580,580,1180,600,580,600,580,580,1180,600,580,600,580,580,600,580,600,25300,2380,560,1200,560,1200,580,600,560,620,560,1200,580,600,560,620,560,1200,580,600,560,620,560,620,560,620,25300,2380,560,1200,560,1220,560,600,580,600,560,1200,580,600,580,600,560,1200,580,600,580,600,560,620,560,620,25300,2380,560,1200,580,1200,560,600,580,600,580,1200,560,600,580,600,560,1200,580,600,580,600,560,620,560,620", // volume down
+			"1984,2400,560,600,600,580,600,580,600,580,580,1180,580,600,560,620,560,1200,580,600,560,620,560,620,560,600,26500,2380,560,620,560,600,580,600,560,620,560,1200,580,600,580,600,560,1200,580,600,560,620,560,620,560,600,26500,2380,560,620,560,600,580,600,580,600,560,1200,580,600,580,600,560,1200,580,600,560,620,560,620,560,620,26480,2380,560,620,560,600,580,600,580,600,560,1200,580,600,560,620,560,1220,560,600,560,620,560,620,560,620,26480,2380,560,620,560,620,560,620,560,600,560,1220,560,600,580,600,560,1200,580,600,580,600,560,620,560,620" // channel up
+	};
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,11 +52,16 @@ public class SelectTVDeviceActivity extends Activity {
 			public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
 				// Get the device MAC address, which is the last 17 chars in the View
 	            String deviceName = ((TextView) v).getText().toString();
-
+	            HashMap<String, String> remoteCodes = getRemoteCodes(deviceName);
 	            // Create the result Intent and include the MAC address
 	            Intent intent = new Intent();
 	            intent.putExtra(DEVICE_NAME, deviceName);
-
+	            intent.putExtra("power", remoteCodes.get("power"));
+	            intent.putExtra("channelUp", remoteCodes.get("channelUp"));
+	            intent.putExtra("channelDown", remoteCodes.get("channelDown"));
+	            intent.putExtra("volumeUp", remoteCodes.get("volumeUp"));
+	            intent.putExtra("volumeDown", remoteCodes.get("volumeDown"));
+	            
 	            // Set result and finish this Activity
 	            setResult(Activity.RESULT_OK, intent);
 	            finish();
@@ -58,6 +70,18 @@ public class SelectTVDeviceActivity extends Activity {
         	
         });
         
+	}
+	
+	// this is where we'd fetch remote codes from the server
+	// we'll hard code this for now
+	private HashMap<String, String> getRemoteCodes(String device) {
+		HashMap<String, String> codes = new HashMap<String, String>();
+		if(device == "Sony") {
+			codes.put("power", SONY_CODES[0]);
+			codes.put("volumeDown", SONY_CODES[1]);
+			codes.put("channelUp", SONY_CODES[2]);
+		}
+		return codes;
 	}
 	
 	

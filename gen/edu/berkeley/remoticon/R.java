@@ -23,54 +23,72 @@ public final class R {
     }
     public static final class drawable {
         public static final int button_background=0x7f020000;
-        public static final int greencheck=0x7f020001;
-        public static final int ic_action_search=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int redx=0x7f020004;
-        public static final int show_img_placeholder=0x7f020005;
+        public static final int channel_down=0x7f020001;
+        public static final int channel_up=0x7f020002;
+        public static final int greencheck=0x7f020003;
+        public static final int ic_action_search=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int redx=0x7f020006;
+        public static final int show_img_placeholder=0x7f020007;
+        public static final int speaker_loud=0x7f020008;
+        public static final int speaker_quiet=0x7f020009;
     }
     public static final class id {
-        public static final int Foo=0x7f090024;
-        public static final int airingsList=0x7f090025;
-        public static final int bluetoothConnectionBtn=0x7f09001b;
-        public static final int btStatusText=0x7f09001c;
-        public static final int btmanager=0x7f090026;
+        public static final int Button00=0x7f090022;
+        public static final int Button01=0x7f090019;
+        public static final int Button02=0x7f09001a;
+        public static final int Button03=0x7f09001b;
+        public static final int Button04=0x7f09001c;
+        public static final int Button05=0x7f09001d;
+        public static final int Button06=0x7f09001e;
+        public static final int Button07=0x7f09001f;
+        public static final int Button08=0x7f090020;
+        public static final int Button09=0x7f090021;
+        public static final int Foo=0x7f090032;
+        public static final int airingsList=0x7f090033;
+        public static final int bluetoothConnectionBtn=0x7f090029;
+        public static final int btStatusText=0x7f09002a;
+        public static final int btmanager=0x7f090034;
         public static final int button1=0x7f090002;
         public static final int button2=0x7f090003;
         public static final int button3=0x7f090004;
         public static final int button_scan=0x7f09000c;
         public static final int channelAbbrev=0x7f09000d;
+        public static final int channelDown=0x7f090018;
         public static final int channelNum=0x7f09000e;
+        public static final int channelUp=0x7f090017;
         public static final int connect_button=0x7f090001;
         public static final int description=0x7f090006;
-        public static final int devicesList=0x7f090018;
+        public static final int devicesList=0x7f090026;
         public static final int editText1=0x7f090011;
-        public static final int findTVBtn=0x7f09001d;
-        public static final int finishSetup=0x7f09001f;
+        public static final int findTVBtn=0x7f09002b;
+        public static final int finishSetup=0x7f09002d;
         public static final int guideView=0x7f090016;
-        public static final int imageButton1=0x7f090022;
-        public static final int networkTitle=0x7f090021;
+        public static final int imageButton1=0x7f090030;
+        public static final int networkTitle=0x7f09002f;
         public static final int new_devices=0x7f09000b;
         public static final int nextButton=0x7f090015;
         public static final int paired_devices=0x7f090009;
         public static final int prevButton=0x7f090012;
         public static final int realtabcontent=0x01010000;
-        public static final int setup=0x7f090027;
+        public static final int setup=0x7f090035;
         public static final int show1_label=0x7f09000f;
         public static final int show2_label=0x7f090010;
-        public static final int showDescription=0x7f090023;
+        public static final int showDescription=0x7f090031;
         public static final int showTime=0x7f090007;
-        public static final int showTitle=0x7f090020;
+        public static final int showTitle=0x7f09002e;
         public static final int status=0x7f090000;
-        public static final int test_foo=0x7f090017;
-        public static final int textView1=0x7f090019;
-        public static final int textView2=0x7f09001a;
+        public static final int textView1=0x7f090027;
+        public static final int textView2=0x7f090028;
         public static final int time1=0x7f090013;
         public static final int time2=0x7f090014;
         public static final int title=0x7f090005;
         public static final int title_new_devices=0x7f09000a;
         public static final int title_paired_devices=0x7f090008;
-        public static final int tvSelectStatusText=0x7f09001e;
+        public static final int tvSelectStatusText=0x7f09002c;
+        public static final int volumeControl=0x7f090023;
+        public static final int volumeDown=0x7f090024;
+        public static final int volumeUp=0x7f090025;
     }
     public static final class layout {
         public static final int activity_arduino_bt=0x7f030000;
@@ -120,6 +138,7 @@ public final class R {
     }
     public static final class style {
         public static final int AppTheme=0x7f070000;
+        public static final int ChannelNumButtons=0x7f070002;
         public static final int SetupButtons=0x7f070001;
     }
 }
