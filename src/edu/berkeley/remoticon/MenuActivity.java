@@ -1,35 +1,41 @@
 package edu.berkeley.remoticon;
 
 import java.util.HashMap;
-
-import edu.berkeley.remoticon.ExploreFragment;
-import edu.berkeley.remoticon.FavoritesFragment;
-import edu.berkeley.remoticon.GuideFragment;
-import edu.berkeley.remoticon.RemoteFragment;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.os.StrictMode;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.Activity;
 import android.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
-import android.widget.TabHost.TabContentFactory;
+import android.widget.Toast;
 
 public class MenuActivity extends FragmentActivity {
-
+	private ConnectionManager CM;
+	private ConnectionListener CL;
+	
+	private boolean listenerRegistered = false;
+	private boolean keepService = false;
+	
 	private final String REMOTE_TAB = "remote";
 	private final String GUIDE_TAB = "guide";
 	private final String FAVORITES_TAB = "favorites";
 	private final String EXPLORE_TAB = "explore";
 
+	private MenuItem btButton;
+	
 	private TabHost mTabHost;
 	private HashMap mapTabInfo = new HashMap();
 	private TabInfo mLastTab = null;
@@ -59,6 +65,14 @@ public class MenuActivity extends FragmentActivity {
 	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		CM = (ConnectionManager)getApplicationContext();
+        CL = new ConnectionListener();
+        if (!listenerRegistered) {
+            registerReceiver(CL, new IntentFilter("edu.berkeley.remoticon.statusupdate"));
+            listenerRegistered = true;
+        }
+
+		
 		setContentView(R.layout.tab_layout);
 		setupTabs(savedInstanceState);
 		apiHandler = new RoviApiHandler();
@@ -66,9 +80,99 @@ public class MenuActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
+		btButton = menu.getItem(0);
+		setBTStatus(CM.getBTService().getState());
 		return true;
 	}
 
+	@Override
+	public void onStart()
+	{
+		super.onStart();
+		if (!CM.getAdapter().isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, ConnectionManager.REQUEST_ENABLE_BT);
+		}
+	}
+	@Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Stop the Bluetooth chat services
+        if (!keepService)
+        {
+        	CM.stopService();
+       	}
+        keepService = false;
+        if (listenerRegistered)
+        {
+	        listenerRegistered = false;
+	        unregisterReceiver(CL);
+        }
+    }
+
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.btmanager:
+	        	connectToBT();
+	            return true;
+	        case R.id.setup:
+	        	Intent setupIntent = new Intent(this, SetupActivity.class);
+	        	setupIntent.putExtra("force", true);
+	        	startActivity(setupIntent);
+	        	keepService = true;
+	        	finish();
+	        	return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+    private void connectToBT()
+	{
+        Intent listDevicesIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(listDevicesIntent, ConnectionManager.REQUEST_CONNECT_DEVICE);
+	}
+
+	
+	private void setBTStatus(int status)
+	{
+    	switch(status)
+    	{
+    	case BluetoothService.STATE_CONNECTED:
+        	btButton.setIcon(R.drawable.greencheck);
+    		break;
+    	case BluetoothService.STATE_CONNECTING:
+    		btButton.setIcon(android.R.drawable.ic_menu_rotate);
+    		break;
+    	case BluetoothService.STATE_NONE:
+    		btButton.setIcon(R.drawable.redx);
+    		break;
+    	}
+	}
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+        case ConnectionManager.REQUEST_CONNECT_DEVICE:
+            // When DeviceListActivity returns with a device to connect
+            if (resultCode == Activity.RESULT_OK) {
+                CM.connectDevice(data);
+            }
+            break;
+        case ConnectionManager.REQUEST_ENABLE_BT:
+            // When the request to enable Bluetooth returns
+            if (resultCode == Activity.RESULT_OK) {
+            } else {
+                // User did not enable Bluetooth or an error occurred
+                Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            break;
+        }
+    }
+
+	
+	
 	public class NavTabListener<T extends Fragment> implements TabListener {
 		private Fragment mFragment;
 		private final Activity mActivity;
@@ -155,4 +259,16 @@ public class MenuActivity extends FragmentActivity {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
         }
     }
+	
+    private class ConnectionListener extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("edu.berkeley.remoticon.statusupdate")) {
+            	//intent has state, but may as well query it directly
+            	setBTStatus(CM.getBTService().getState());
+            }
+        }
+    }
+
 }

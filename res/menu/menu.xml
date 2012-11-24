@@ -2,20 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 	<item
 	    android:id="@+id/btmanager"
-	    android:icon="@drawable/show_img_placeholder"
-	    android:title="Manage Connection"
-		android:showAsAction="ifRoom|withText" />
-    <item
-        android:id="@+id/home"
-        android:title="Home"/>
-    <item
-        android:id="@+id/guide"
-        android:title="Guide"/>
-    <item
-        android:id="@+id/favorites"
-        android:title="Favorites"/>
-    <item
-        android:id="@+id/explore"
-        android:title="Guide"/>
-
+	    android:icon="@drawable/redx"
+		android:showAsAction="always" />
+	<item 
+	    android:id="@+id/setup"
+	    android:title="Setup"/>
 </menu>
