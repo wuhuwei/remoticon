@@ -23,6 +23,7 @@ import android.widget.TabHost;
 import android.widget.Toast;
 
 public class MenuActivity extends FragmentActivity {
+	private String TAG = "MenuActivity";
 	private ConnectionManager CM;
 	private ConnectionListener CL;
 	
@@ -96,6 +97,7 @@ public class MenuActivity extends FragmentActivity {
 	}
 	@Override
     public void onDestroy() {
+		Log.e(TAG, "onDestroy");
         super.onDestroy();
         // Stop the Bluetooth chat services
         if (!keepService)
@@ -118,10 +120,10 @@ public class MenuActivity extends FragmentActivity {
 	        	connectToBT();
 	            return true;
 	        case R.id.setup:
+	        	keepService = true;
 	        	Intent setupIntent = new Intent(this, SetupActivity.class);
 	        	setupIntent.putExtra("force", true);
 	        	startActivity(setupIntent);
-	        	keepService = true;
 	        	finish();
 	        	return true;
 	        default:

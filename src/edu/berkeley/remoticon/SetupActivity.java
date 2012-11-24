@@ -42,6 +42,8 @@ public class SetupActivity extends Activity {
 		
 		CM = (ConnectionManager)getApplicationContext();
 		
+		remoteCodes = new HashMap<String, String>();
+		
 		// Check if we've already done setup. If so, don't present setup
         SharedPreferences prefs = getSharedPreferences("edu.berkeley.remoticon", Context.MODE_PRIVATE);
         boolean forced = getIntent().getBooleanExtra("force", false);
