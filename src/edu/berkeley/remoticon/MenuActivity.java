@@ -123,6 +123,8 @@ public class MenuActivity extends FragmentActivity {
 	        	keepService = true;
 	        	Intent setupIntent = new Intent(this, SetupActivity.class);
 	        	setupIntent.putExtra("force", true);
+	        	setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	        	setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	        	startActivity(setupIntent);
 	        	finish();
 	        	return true;

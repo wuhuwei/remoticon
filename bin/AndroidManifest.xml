@@ -22,17 +22,12 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="edu.berkeley.statusupdate" />
             </intent-filter>
         </activity>
         <activity android:name=".DeviceListActivity" android:label="@string/app_name" />
         <activity android:name=".SelectTVDeviceActivity" android:label="@string/app_name" />
         <activity android:name=".MenuActivity" android:label="@string/app_name" android:exported="false" >
-            <intent-filter>
-	            <action android:name="edu.berkeley.statusupdate" />
-            </intent-filter>
         </activity>
             
  

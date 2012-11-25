@@ -121,6 +121,8 @@ public class SetupActivity extends Activity {
             		editor.commit();
         			setupRemoteCodes();
             		Intent i = new Intent(v.getContext(), MenuActivity.class);
+    	        	i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	        	i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             		startActivity(i);
             		SetupActivity.this.finish();
         			
