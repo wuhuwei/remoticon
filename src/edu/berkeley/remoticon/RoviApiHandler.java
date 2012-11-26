@@ -225,7 +225,6 @@ public class RoviApiHandler {
 			JSONObject response = readResponse(in);
 			JSONObject programDetails = (JSONObject)((JSONObject)response.get("ProgramDetailsResult")).get("Program");
 			String showDescription = (String)programDetails.get("CopyText");
-			
 			JSONArray airings = (JSONArray)((JSONObject)((JSONObject)response.get("ProgramDetailsResult")).get("Schedule")).get("Airings");
 			
 			ArrayList<Airing> nextAirings = new ArrayList<Airing>();

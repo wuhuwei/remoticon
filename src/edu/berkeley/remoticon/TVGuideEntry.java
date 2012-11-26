@@ -1,7 +1,6 @@
 package edu.berkeley.remoticon;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.os.Parcel;
 import android.os.Parcelable;

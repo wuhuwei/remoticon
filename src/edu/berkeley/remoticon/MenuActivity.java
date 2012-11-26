@@ -22,8 +22,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.Toast;
 
@@ -107,7 +105,6 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 			
 			if (currChannelStr != null)
 			{
-				Log.e(TAG, currChannelStr);
 				int commaInd = currChannelStr.lastIndexOf(',');
 				currChannel = Integer.parseInt(currChannelStr.substring(commaInd+1));
 				currLabel = currChannelStr.substring(0, commaInd);
@@ -123,6 +120,11 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 		btButton = menu.getItem(0);
 		setBTStatus(CM.getBTService().getState());
 		return true;
+	}
+	
+	public ConnectionManager getCM() {
+		return CM;
+	
 	}
 
 	@Override
@@ -192,13 +194,13 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
     	switch(status)
     	{
     	case BluetoothService.STATE_CONNECTED:
-        	btButton.setIcon(R.drawable.greencheck);
+        	btButton.setIcon(R.drawable.bt_green);
     		break;
     	case BluetoothService.STATE_CONNECTING:
     		btButton.setIcon(android.R.drawable.ic_menu_rotate);
     		break;
     	case BluetoothService.STATE_NONE:
-    		btButton.setIcon(R.drawable.redx);
+    		btButton.setIcon(R.drawable.bt_red);
     		break;
     	}
 	}
@@ -348,6 +350,32 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 		DialogFragment editFragment = new FavoritesEditDialog(favLabels.get(ind),favChannels.get(ind));
 		editFragment.show(getFragmentManager(), "editFavorite");
 	}
+    public void sendCode(String code)
+    {
+    	System.out.println(code);
+    	if (CM.getBTService().getState() == BluetoothService.STATE_CONNECTED)
+    	{
+    		System.out.println("am i here?");
+    		CM.getBTService().write(formatIRCode(code).getBytes());
+    	}
+    	else
+    	{
+    		connectToBT();
+    	}
+    }
+    
+    public String formatIRCode(String code)
+    {
+    	int numNums = 0;
+    	for (int j = 0; j < code.length(); ++j)
+    	{
+    		if (code.charAt(j) == ',')
+    		{
+    			++numNums;
+    		}
+    	}
+    	return "" + (numNums+1) + "," + code;
+    }
 
     
 	@Override
