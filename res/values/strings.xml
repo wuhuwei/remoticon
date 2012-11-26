@@ -23,6 +23,11 @@
     <string name="select_device">Select Devices</string>
     <string name="none_found">No Devices Found</string>
     <string name="bt_not_enabled_leaving">Bluetooth was not Enabled</string>
-    
     <string name="tv_device_not_selected">You have not selected a TV device for Remoticon.</string>
+    <string name="edit_favorite">Edit Favorite</string>
+    <string name="label_hint">Name</string>
+    <string name="channel_hint">Channel</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>

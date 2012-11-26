@@ -1,10 +1,13 @@
 package edu.berkeley.remoticon;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
@@ -12,6 +15,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -19,10 +23,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-public class MenuActivity extends FragmentActivity {
+public class MenuActivity extends FragmentActivity implements FavoritesEditDialog.FavoritesEditListener{
 	private String TAG = "MenuActivity";
 	private ConnectionManager CM;
 	private ConnectionListener CL;
@@ -41,6 +46,15 @@ public class MenuActivity extends FragmentActivity {
 	private HashMap mapTabInfo = new HashMap();
 	private TabInfo mLastTab = null;
 	private RoviApiHandler apiHandler;
+	
+	
+	//Favorites Management
+	private final int numChannels = 12;
+	public int selectedFavorite = -1;
+	ArrayList<Integer> favChannels;
+	ArrayList<String> favLabels;
+
+
 	
 	public RoviApiHandler getApiHandler() {
 		return apiHandler;
@@ -77,7 +91,32 @@ public class MenuActivity extends FragmentActivity {
 		setContentView(R.layout.tab_layout);
 		setupTabs(savedInstanceState);
 		apiHandler = new RoviApiHandler();
+		
+		//Setup Favorites
+		
+		favChannels = new ArrayList<Integer>();
+		favLabels = new ArrayList<String>();
+	
+		//favorite #i is stored as label,channel
+		SharedPreferences prefs = getSharedPreferences("edu.berkeley.remoticon", Context.MODE_PRIVATE);
+		for (int i = 0; i < numChannels; ++i)
+		{
+			String currChannelStr = prefs.getString("favChannel"+i, null);
+			int currChannel = -1;
+			String currLabel = "";
+			
+			if (currChannelStr != null)
+			{
+				Log.e(TAG, currChannelStr);
+				int commaInd = currChannelStr.lastIndexOf(',');
+				currChannel = Integer.parseInt(currChannelStr.substring(commaInd+1));
+				currLabel = currChannelStr.substring(0, commaInd);
+			}
+			favChannels.add(currChannel);
+			favLabels.add(currLabel);
+		}
 	}
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
@@ -99,7 +138,6 @@ public class MenuActivity extends FragmentActivity {
     public void onDestroy() {
 		Log.e(TAG, "onDestroy");
         super.onDestroy();
-        // Stop the Bluetooth chat services
         if (!keepService)
         {
         	CM.stopService();
@@ -109,6 +147,16 @@ public class MenuActivity extends FragmentActivity {
         {
 	        listenerRegistered = false;
 	        unregisterReceiver(CL);
+        }
+        //Save favorites now
+        Log.e(TAG, "saving favorites");
+    	SharedPreferences prefs = getSharedPreferences("edu.berkeley.remoticon", Context.MODE_PRIVATE);
+    	SharedPreferences.Editor editor = prefs.edit();
+        for (int i = 0; i < numChannels; ++i)
+        {
+        	String channelString = favLabels.get(i)+","+favChannels.get(i).toString();
+        	editor.putString("favChannel"+i, channelString);
+        	editor.commit();
         }
     }
 
@@ -274,5 +322,65 @@ public class MenuActivity extends FragmentActivity {
             }
         }
     }
+    
+    public void promptAddFavorite(String newLabel, int newChannel)
+    {
+    	selectedFavorite = -1;
+    	for (int i = 0; i < numChannels; ++i)
+    	{
+    		if (favChannels.get(i) != -1)
+    		{
+    			selectedFavorite = i;
+    		}
+    	}
+    	if (selectedFavorite == -1)
+    	{
+    		Toast.makeText(this, "All Favorite Slots are Full", Toast.LENGTH_SHORT).show();
+    		return;
+    	}
+    	DialogFragment editFragment = new FavoritesEditDialog(newLabel, newChannel);
+    	editFragment.show(getFragmentManager(), "editFavorite");
+    }
+    
+	public void promptEditFavorite(int ind)
+	{
+		selectedFavorite = ind;
+		DialogFragment editFragment = new FavoritesEditDialog(favLabels.get(ind),favChannels.get(ind));
+		editFragment.show(getFragmentManager(), "editFavorite");
+	}
 
+    
+	@Override
+	public void EditFavoriteSave(DialogFragment dialog, String label, int channel) {
+		if (selectedFavorite == -1)
+		{
+			Log.e(TAG, "favorite was not properly specified");
+			return;
+		}
+		favLabels.set(selectedFavorite, label);
+		favChannels.set(selectedFavorite, channel);
+		
+		((FavoritesFragment)getFragmentManager().findFragmentByTag(FAVORITES_TAB)).setButtonText(selectedFavorite);
+		
+		selectedFavorite = -1;
+	}
+	
+	@Override
+	public void EditFavoriteDelete(DialogFragment dialog) {
+		if (selectedFavorite == -1)
+		{
+			Log.e(TAG, "favorite was not properly specified");
+			return;
+		}
+		favLabels.set(selectedFavorite, "");
+		favChannels.set(selectedFavorite, -1);
+		
+		((FavoritesFragment)getFragmentManager().findFragmentByTag(FAVORITES_TAB)).setButtonText(selectedFavorite);
+		
+		selectedFavorite = -1;
+	}
+	@Override
+	public void EditFavoriteCancel(DialogFragment dialog) {
+		selectedFavorite = -1;
+	}
 }
