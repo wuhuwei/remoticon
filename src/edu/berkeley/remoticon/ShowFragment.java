@@ -8,6 +8,7 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,8 +31,12 @@ public class ShowFragment extends Fragment {
 	TextView showTitle;
 	TextView networkTitle;
 	TextView showDescription;
+	ImageView showImage;
 	ExpandableListView airingsView;
-
+	
+	ProgressDialog loader;
+	
+	
 	public ShowFragment() {
 		super();
 	}
@@ -61,23 +67,26 @@ public class ShowFragment extends Fragment {
 
 		showDescription = (TextView) activity
 				.findViewById(R.id.showDescription);
-
-		networkTitle = (TextView) activity.findViewById(R.id.networkTitle);
-		networkTitle.setText(channel.getFullName());
+		showDescription.setVisibility(View.GONE);
 		
-		System.out.println(activity);
-		System.out.println(activity.getFragmentManager());
-		System.out.println(activity.getFragmentManager()
-				.getBackStackEntryCount());
+		networkTitle = (TextView) activity.findViewById(R.id.networkTitle);
+		networkTitle.setText(channel.getFullName() + " (" + channel.getAbbr() + ")");
+		
+		// TODO: fetch show images?
+		showImage = (ImageView) activity.findViewById(R.id.showImage);
+		showImage.setVisibility(View.GONE);
+		
+		loader = new ProgressDialog(activity);
 
 		ShowInfoFetcher task = new ShowInfoFetcher();
-
 		task.execute(new String[] { "76550", Integer.toString(show.getId()) });
-
 	}
 
 	private class ShowInfoFetcher extends AsyncTask<String, Void, Show> {
-
+		protected void onPreExecute() {
+			loader.setMessage("Loading...");
+			loader.show();
+		}
 		@Override
 		protected Show doInBackground(String... queryInfo) {
 			return activity.getApiHandler().getShow(queryInfo[0], queryInfo[1]);
@@ -92,9 +101,11 @@ public class ShowFragment extends Fragment {
 	private void populateView() {
 		if(info != null) {
 			showDescription.setText(info.getDescription());
+			showDescription.setVisibility(View.VISIBLE);
+			
 			airingsView.setAdapter(new NextAiringsListAdapter(activity, info.getAirings()));
 		}
-		
+		loader.dismiss();
 	}
 	
 	private class NextAiringsListAdapter extends BaseExpandableListAdapter {

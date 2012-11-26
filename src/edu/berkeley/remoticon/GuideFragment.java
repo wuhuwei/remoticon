@@ -39,12 +39,12 @@ public class GuideFragment extends Fragment {
 	Date startTime;
 	LayoutInflater mInflater;
 	Calendar calendar;
-	
+
 	TextView time1;
 	TextView time2;
 	Button nextButton;
 	Button prevButton;
-	
+
 	ProgressDialog loadingBar;
 
 	@Override
@@ -92,7 +92,7 @@ public class GuideFragment extends Fragment {
 						roundedHalfHourFormat.format(calendar.getTime()) });
 			}
 		});
-		
+
 		nextButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				ListingFetcher task = new ListingFetcher();
@@ -102,7 +102,7 @@ public class GuideFragment extends Fragment {
 						roundedHalfHourFormat.format(calendar.getTime()) });
 			}
 		});
-		
+
 		roundedHalfHourFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:00'Z'");
 		calendar = Calendar.getInstance();
 		if (activity != null) {
@@ -126,28 +126,25 @@ public class GuideFragment extends Fragment {
 			fillGuideTable();
 		}
 
-		
-		
-
 	}
 
 	private class ListingFetcher extends
 			AsyncTask<String, Void, ArrayList<TVGuideEntry>> {
-		
+
 		@Override
 		protected void onPreExecute() {
 			loadingBar.setMessage("Loading...");
 			loadingBar.show();
 		}
-		
+
 		@Override
 		protected ArrayList<TVGuideEntry> doInBackground(String... queryInfo) {
-			
+
 			time1.setVisibility(View.INVISIBLE);
 			time2.setVisibility(View.INVISIBLE);
 			prevButton.setVisibility(View.INVISIBLE);
 			nextButton.setVisibility(View.INVISIBLE);
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat(
 					"yyyy-MM-dd'T'HH:mm:ss'Z'");
 			try {
@@ -156,7 +153,8 @@ public class GuideFragment extends Fragment {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return activity.getApiHandler().getListings(queryInfo[0], queryInfo[1]);
+			return activity.getApiHandler().getListings(queryInfo[0],
+					queryInfo[1]);
 		}
 
 		@Override
@@ -190,8 +188,7 @@ public class GuideFragment extends Fragment {
 	 * LayoutParams.WRAP_CONTENT)); } }
 	 */
 	private void fillGuideTable() {
-		
-		
+
 		Calendar calendar;
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		time1.setText(timeFormat.format(startTime));
@@ -255,17 +252,24 @@ public class GuideFragment extends Fragment {
 			}
 			ArrayList<Program> shows = e.getShows();
 
-			holder.showLabels.get(0).setText(shows.get(0).getName());
-			holder.showLabels.get(0).setOnClickListener(
-					new ShowItemClickListener(c, shows.get(0)));
-
+			Program s1 = shows.get(0);
+			holder.showLabels.get(0).setText(s1.getName());
+			if (s1.getId() != 0) {
+				holder.showLabels.get(0).setOnClickListener(
+						new ShowItemClickListener(c, s1));
+			}
 			if (shows.size() == 1) {
-				holder.showLabels.get(1).setOnClickListener(
-						new ShowItemClickListener(c, shows.get(0)));
 				holder.showLabels.get(1).setText(shows.get(0).getName());
+				if(s1.getId() != 0) {
+					holder.showLabels.get(1).setOnClickListener(
+							new ShowItemClickListener(c, s1));
+				}
 			} else {
-				holder.showLabels.get(1).setOnClickListener(
-						new ShowItemClickListener(c, shows.get(1)));
+				if(shows.get(1).getId() != 0) {
+					holder.showLabels.get(1).setOnClickListener(
+							new ShowItemClickListener(c, shows.get(1)));	
+				}
+				
 				holder.showLabels.get(1).setText(shows.get(1).getName());
 			}
 

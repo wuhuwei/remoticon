@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ebf5fa"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="10dip" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:gravity="center_vertical|center_horizontal"
+            android:padding="5dip"
             android:text="&lt;&lt;" />
 
         <LinearLayout
@@ -76,7 +78,9 @@
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:padding="5dip"
                     android:text=">>" />
+
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

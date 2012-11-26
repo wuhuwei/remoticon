@@ -1,6 +1,7 @@
 package edu.berkeley.remoticon;
 
 import java.util.HashMap;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
@@ -84,6 +85,11 @@ public class MenuActivity extends FragmentActivity {
 		btButton = menu.getItem(0);
 		setBTStatus(CM.getBTService().getState());
 		return true;
+	}
+	
+	public ConnectionManager getCM() {
+		return CM;
+	
 	}
 
 	@Override
@@ -271,6 +277,33 @@ public class MenuActivity extends FragmentActivity {
             	setBTStatus(CM.getBTService().getState());
             }
         }
+    }
+    
+    public void sendCode(String code)
+    {
+    	System.out.println(code);
+    	if (CM.getBTService().getState() == BluetoothService.STATE_CONNECTED)
+    	{
+    		System.out.println("am i here?");
+    		CM.getBTService().write(formatIRCode(code).getBytes());
+    	}
+    	else
+    	{
+    		connectToBT();
+    	}
+    }
+    
+    public String formatIRCode(String code)
+    {
+    	int numNums = 0;
+    	for (int j = 0; j < code.length(); ++j)
+    	{
+    		if (code.charAt(j) == ',')
+    		{
+    			++numNums;
+    		}
+    	}
+    	return "" + (numNums+1) + "," + code;
     }
 
 }

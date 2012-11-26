@@ -27,7 +27,7 @@ public class RemoteFragment extends Fragment {
 
 	ImageView channelUp;
 	ImageView channelDown;
-
+	Button powerBtn;
 	Button volumeUp;
 	Button volumeDown;
 
@@ -45,7 +45,7 @@ public class RemoteFragment extends Fragment {
 	SeekBar volumeControl;
 	ImageView powerButton;
 	
-	Activity activity;
+	MenuActivity activity;
 
 	HashMap<String, String> remoteCodes;
 
@@ -62,15 +62,15 @@ public class RemoteFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		activity = getActivity();
+		activity = (MenuActivity)getActivity();
 
 		if (activity != null) {
+			powerBtn = (Button) activity.findViewById(R.id.powerBtn);
+			powerBtn.setOnClickListener(new RemoteBtnClickListener("power"));
 			channelUp = (ImageView) activity.findViewById(R.id.channelUp);
 			channelUp.setOnClickListener(new RemoteBtnClickListener("channelUp"));
 			channelDown = (ImageView) activity.findViewById(R.id.channelDown);
 			channelDown.setOnClickListener(new RemoteBtnClickListener("channelDown"));
-			
-			volumeControl = (SeekBar) activity.findViewById(R.id.volumeControl);
 
 			volumeUp = (Button) activity.findViewById(R.id.volumeUp);
 			volumeUp.setOnClickListener(new RemoteBtnClickListener("volumeUp"));
@@ -102,8 +102,10 @@ public class RemoteFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			String signal = remoteCodes.get(key);
-			// TODO
-			// send bluetooth signal here
+			//System.out.println(signal);
+			if(signal != null) {
+				activity.sendCode(signal);
+			}
 			
 		}
 		
@@ -118,6 +120,8 @@ public class RemoteFragment extends Fragment {
 		remoteCodes.put("channelDown", prefs.getString("channelDown", null));
 		remoteCodes.put("volumeUp", prefs.getString("volumeUp", null));
 		remoteCodes.put("volumeDown", prefs.getString("volumeDown", null));
+		
+		System.out.println(remoteCodes);
 	}
 	
 

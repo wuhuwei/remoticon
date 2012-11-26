@@ -201,6 +201,7 @@ public class SetupActivity extends Activity {
         		remoteCodes.put("volumeUp", data.getStringExtra("volumeUp"));
         		remoteCodes.put("volumeDown", data.getStringExtra("volumeDown"));        		
         	}
+        	System.out.println(remoteCodes.toString());
 			break;
         }
     }
@@ -220,7 +221,7 @@ public class SetupActivity extends Activity {
     
     public void setupRemoteCodes() {
     	// save preferences
-    	
+    	System.out.println(remoteCodes);
     	SharedPreferences prefs = getSharedPreferences("edu.berkeley.remoticon", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("deviceName", CM.getTVName());
@@ -228,7 +229,7 @@ public class SetupActivity extends Activity {
 		editor.putString("channelUp", remoteCodes.get("channelUp"));
 		editor.putString("channelDown", remoteCodes.get("channelDown"));
 		editor.putString("volumeUp", remoteCodes.get("volumeUp"));
-		editor.putString("volumeDown", remoteCodes.get("channelUp"));
+		editor.putString("volumeDown", remoteCodes.get("volumeDown"));
 		editor.commit();
     	Intent mainMenuIntent = new Intent(this, MenuActivity.class);
     	startActivity(mainMenuIntent);
