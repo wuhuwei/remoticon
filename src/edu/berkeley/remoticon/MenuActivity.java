@@ -45,6 +45,7 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 	private TabInfo mLastTab = null;
 	private RoviApiHandler apiHandler;
 	
+	HashMap<String, String> remoteCodes;
 	
 	//Favorites Management
 	private final int numChannels = 12;
@@ -90,8 +91,10 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 		setupTabs(savedInstanceState);
 		apiHandler = new RoviApiHandler();
 		
-		//Setup Favorites
+		//setup Remote Codes
+		fillRemoteCodes();
 		
+		//Setup Favorites
 		favChannels = new ArrayList<Integer>();
 		favLabels = new ArrayList<String>();
 	
@@ -226,6 +229,29 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
     }
 
 	
+	private void fillRemoteCodes() {
+		remoteCodes = new HashMap<String, String>();
+		SharedPreferences prefs = getSharedPreferences(
+				"edu.berkeley.remoticon", Context.MODE_PRIVATE);
+		remoteCodes.put("power", prefs.getString("power", null));
+		remoteCodes.put("channelUp", prefs.getString("channelUp", null));
+		remoteCodes.put("channelDown", prefs.getString("channelDown", null));
+		remoteCodes.put("volumeUp", prefs.getString("volumeUp", null));
+		remoteCodes.put("volumeDown", prefs.getString("volumeDown", null));
+		remoteCodes.put("1", prefs.getString("1", null));
+		remoteCodes.put("2", prefs.getString("2", null));
+		remoteCodes.put("3", prefs.getString("3", null));
+		remoteCodes.put("4", prefs.getString("4", null));
+		remoteCodes.put("5", prefs.getString("5", null));
+		remoteCodes.put("6", prefs.getString("6", null));
+		remoteCodes.put("7", prefs.getString("7", null));
+		remoteCodes.put("8", prefs.getString("8", null));
+		remoteCodes.put("9", prefs.getString("9", null));
+		remoteCodes.put("0", prefs.getString("0", null));
+		System.out.println(remoteCodes);
+	}
+
+	
 	
 	public class NavTabListener<T extends Fragment> implements TabListener {
 		private Fragment mFragment;
@@ -349,6 +375,19 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 		selectedFavorite = ind;
 		DialogFragment editFragment = new FavoritesEditDialog(favLabels.get(ind),favChannels.get(ind));
 		editFragment.show(getFragmentManager(), "editFavorite");
+	}
+	
+	public void goToChannel(int channel)
+	{
+		String signal = "";
+		Log.e(TAG, "going to channel");
+		while (channel > 0)
+		{
+			int currDigit = channel % 10;
+			signal = remoteCodes.get(("" + currDigit)) + signal;
+			channel = channel / 10;
+		}
+		sendCode(signal);
 	}
     public void sendCode(String code)
     {

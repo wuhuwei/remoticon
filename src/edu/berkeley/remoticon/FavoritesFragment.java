@@ -116,7 +116,7 @@ public class FavoritesFragment extends Fragment {
 		public void onClick(View v) {
 			if (parent.favChannels.get(myInd) != -1)
 			{
-				//SEND CODE
+				parent.goToChannel(parent.favChannels.get(myInd));
 			}
 			else
 			{

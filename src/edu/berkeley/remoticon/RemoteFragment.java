@@ -50,8 +50,6 @@ public class RemoteFragment extends Fragment {
 	
 	MenuActivity activity;
 
-	HashMap<String, String> remoteCodes;
-
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (container == null) {
@@ -106,7 +104,6 @@ public class RemoteFragment extends Fragment {
 			channelInput.setText("");
 			enterBtn = (Button) activity.findViewById(R.id.enterBtn);
 			enterBtn.setOnClickListener(new ChannelClickListener());
-			fillRemoteCodes();
 		}
 	}
 	
@@ -126,7 +123,7 @@ public class RemoteFragment extends Fragment {
 		
 		@Override
 		public void onClick(View v) {
-			String signal = remoteCodes.get(key);
+			String signal = activity.remoteCodes.get(key);
 			//System.out.println(signal);
 			if(signal != null) {
 				activity.sendCode(signal);
@@ -141,34 +138,12 @@ public class RemoteFragment extends Fragment {
 			String channel = (String) channelInput.getText();
 			String signal = "";
 			for(int i = 0; i < channel.length(); i++) {
-				signal += remoteCodes.get(channel.charAt(i));
+				signal += activity.remoteCodes.get(channel.charAt(i));
 			}
 			activity.sendCode(signal);
 			
 		}
 	}
-	
-	private void fillRemoteCodes() {
-		remoteCodes = new HashMap<String, String>();
-		SharedPreferences prefs = activity.getSharedPreferences(
-				"edu.berkeley.remoticon", Context.MODE_PRIVATE);
-		remoteCodes.put("power", prefs.getString("power", null));
-		remoteCodes.put("channelUp", prefs.getString("channelUp", null));
-		remoteCodes.put("channelDown", prefs.getString("channelDown", null));
-		remoteCodes.put("volumeUp", prefs.getString("volumeUp", null));
-		remoteCodes.put("volumeDown", prefs.getString("volumeDown", null));
-		remoteCodes.put("1", prefs.getString("1", null));
-		remoteCodes.put("2", prefs.getString("2", null));
-		remoteCodes.put("3", prefs.getString("3", null));
-		remoteCodes.put("4", prefs.getString("4", null));
-		remoteCodes.put("5", prefs.getString("5", null));
-		remoteCodes.put("6", prefs.getString("6", null));
-		remoteCodes.put("7", prefs.getString("7", null));
-		remoteCodes.put("8", prefs.getString("8", null));
-		remoteCodes.put("9", prefs.getString("9", null));
-		remoteCodes.put("0", prefs.getString("0", null));
-		System.out.println(remoteCodes);
-	}
-	
+		
 
 }
