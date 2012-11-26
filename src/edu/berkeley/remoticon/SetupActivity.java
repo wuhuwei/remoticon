@@ -194,12 +194,21 @@ public class SetupActivity extends Activity {
         	if (resultCode == Activity.RESULT_OK) {
         		CM.setTVName(data.getStringExtra("deviceName"));
         		tvSelectStatusText.setText(CM.getTVName());
-
         		remoteCodes.put("power", data.getStringExtra("power"));
         		remoteCodes.put("channelUp", data.getStringExtra("channelUp"));
         		remoteCodes.put("channelDown", data.getStringExtra("channelDown"));
         		remoteCodes.put("volumeUp", data.getStringExtra("volumeUp"));
-        		remoteCodes.put("volumeDown", data.getStringExtra("volumeDown"));        		
+        		remoteCodes.put("volumeDown", data.getStringExtra("volumeDown"));
+        		remoteCodes.put("1", data.getStringExtra("1"));
+        		remoteCodes.put("2", data.getStringExtra("2"));
+        		remoteCodes.put("3", data.getStringExtra("3"));
+        		remoteCodes.put("4", data.getStringExtra("4"));
+        		remoteCodes.put("5", data.getStringExtra("5"));
+        		remoteCodes.put("6", data.getStringExtra("6"));
+        		remoteCodes.put("7", data.getStringExtra("7"));
+        		remoteCodes.put("8", data.getStringExtra("8"));
+        		remoteCodes.put("9", data.getStringExtra("9"));
+        		remoteCodes.put("0", data.getStringExtra("0"));
         	}
         	System.out.println(remoteCodes.toString());
 			break;
@@ -230,6 +239,16 @@ public class SetupActivity extends Activity {
 		editor.putString("channelDown", remoteCodes.get("channelDown"));
 		editor.putString("volumeUp", remoteCodes.get("volumeUp"));
 		editor.putString("volumeDown", remoteCodes.get("volumeDown"));
+		editor.putString("1", remoteCodes.get("1"));
+		editor.putString("2", remoteCodes.get("2"));
+		editor.putString("3", remoteCodes.get("3"));
+		editor.putString("4", remoteCodes.get("4"));
+		editor.putString("5", remoteCodes.get("5"));
+		editor.putString("6", remoteCodes.get("6"));
+		editor.putString("7", remoteCodes.get("7"));
+		editor.putString("8", remoteCodes.get("8"));
+		editor.putString("9", remoteCodes.get("9"));
+		editor.putString("0", remoteCodes.get("0"));
 		editor.commit();
     	Intent mainMenuIntent = new Intent(this, MenuActivity.class);
     	startActivity(mainMenuIntent);

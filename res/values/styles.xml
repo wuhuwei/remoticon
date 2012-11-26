@@ -12,14 +12,11 @@
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">25dip</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:paddingRight">15dip</item>
-        <item name="android:paddingLeft">15dip</item>
-        <item name="android:paddingBottom">5dip</item>
         <item name="android:layout_marginLeft">5dip</item>
         <item name="android:layout_marginRight">5dip</item>
         <item name="android:layout_marginTop">5dip</item>
-        <item name="android:minHeight">25dip</item>
-        <item name="android:minWidth">30dip</item>
+        <item name="android:minHeight">40dip</item>
+        <item name="android:minWidth">40dip</item>
     </style>
 
 </resources>

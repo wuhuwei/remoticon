@@ -148,13 +148,13 @@ public class MenuActivity extends FragmentActivity {
     	switch(status)
     	{
     	case BluetoothService.STATE_CONNECTED:
-        	btButton.setIcon(R.drawable.greencheck);
+        	btButton.setIcon(R.drawable.greenbutton);
     		break;
     	case BluetoothService.STATE_CONNECTING:
     		btButton.setIcon(android.R.drawable.ic_menu_rotate);
     		break;
     	case BluetoothService.STATE_NONE:
-    		btButton.setIcon(R.drawable.redx);
+    		btButton.setIcon(R.drawable.redbutton);
     		break;
     	}
 	}

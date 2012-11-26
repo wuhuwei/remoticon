@@ -41,6 +41,9 @@ public class RemoteFragment extends Fragment {
 	Button btnEight;
 	Button btnNine;
 	Button btnZero;
+	
+	TextView channelInput;
+	Button enterBtn;
 
 	SeekBar volumeControl;
 	ImageView powerButton;
@@ -77,19 +80,41 @@ public class RemoteFragment extends Fragment {
 			volumeDown = (Button) activity.findViewById(R.id.volumeDown);
 			volumeDown.setOnClickListener(new RemoteBtnClickListener("volumeDown"));
 			
-			// TODO: add these signals
+			NumPadClickListener numPadListener = new NumPadClickListener();
 			btnOne = (Button) activity.findViewById(R.id.Button01);
+			btnOne.setOnClickListener(numPadListener);
 			btnTwo = (Button) activity.findViewById(R.id.Button02);
+			btnTwo.setOnClickListener(numPadListener);
 			btnThree = (Button) activity.findViewById(R.id.Button03);
+			btnThree.setOnClickListener(numPadListener);
 			btnFour = (Button) activity.findViewById(R.id.Button04);
+			btnFour.setOnClickListener(numPadListener);
 			btnFive = (Button) activity.findViewById(R.id.Button05);
+			btnFive.setOnClickListener(numPadListener);
 			btnSix = (Button) activity.findViewById(R.id.Button06);
+			btnSix.setOnClickListener(numPadListener);
 			btnSeven = (Button) activity.findViewById(R.id.Button07);
+			btnSeven.setOnClickListener(numPadListener);
 			btnEight = (Button) activity.findViewById(R.id.Button08);
+			btnEight.setOnClickListener(numPadListener);
 			btnNine = (Button) activity.findViewById(R.id.Button09);
+			btnNine.setOnClickListener(numPadListener);
 			btnZero = (Button) activity.findViewById(R.id.Button00);
-
+			btnZero.setOnClickListener(numPadListener);
+			
+			channelInput = (TextView) activity.findViewById(R.id.channelInput);
+			channelInput.setText("");
+			enterBtn = (Button) activity.findViewById(R.id.enterBtn);
+			enterBtn.setOnClickListener(new ChannelClickListener());
 			fillRemoteCodes();
+		}
+	}
+	
+	private class NumPadClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			Button b = (Button) v;
+			channelInput.append(b.getText());
 		}
 	}
 	
@@ -108,7 +133,19 @@ public class RemoteFragment extends Fragment {
 			}
 			
 		}
-		
+	}
+	
+	private class ChannelClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			String channel = (String) channelInput.getText();
+			String signal = "";
+			for(int i = 0; i < channel.length(); i++) {
+				signal += remoteCodes.get(channel.charAt(i));
+			}
+			activity.sendCode(signal);
+			
+		}
 	}
 	
 	private void fillRemoteCodes() {
@@ -120,7 +157,16 @@ public class RemoteFragment extends Fragment {
 		remoteCodes.put("channelDown", prefs.getString("channelDown", null));
 		remoteCodes.put("volumeUp", prefs.getString("volumeUp", null));
 		remoteCodes.put("volumeDown", prefs.getString("volumeDown", null));
-		
+		remoteCodes.put("1", prefs.getString("1", null));
+		remoteCodes.put("2", prefs.getString("2", null));
+		remoteCodes.put("3", prefs.getString("3", null));
+		remoteCodes.put("4", prefs.getString("4", null));
+		remoteCodes.put("5", prefs.getString("5", null));
+		remoteCodes.put("6", prefs.getString("6", null));
+		remoteCodes.put("7", prefs.getString("7", null));
+		remoteCodes.put("8", prefs.getString("8", null));
+		remoteCodes.put("9", prefs.getString("9", null));
+		remoteCodes.put("0", prefs.getString("0", null));
 		System.out.println(remoteCodes);
 	}
 	
