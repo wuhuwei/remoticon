@@ -4,99 +4,121 @@
     android:layout_height="fill_parent"
     android:background="#ebf5fa"
     android:orientation="vertical" >
-	
+
     <LinearLayout
-        android:layout_weight="0.25"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <Button 
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
             android:id="@+id/favorites1"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
-        <Button 
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
+
+        <Button
             android:id="@+id/favorites2"
-            android:layout_weight="0.33"
-            android:layout_width ="0dp"
-            android:layout_height = "match_parent"/>
-        <Button 
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
+
+        <Button
             android:id="@+id/favorites3"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
-                
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
     </LinearLayout>
-    	
+
     <LinearLayout
-        android:layout_weight="0.25"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:gravity="center" >
-        <Button 
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
             android:id="@+id/favorites4"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
-        <Button 
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
+
+        <Button
             android:id="@+id/favorites5"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
-        <Button 
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
+
+        <Button
             android:id="@+id/favorites6"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
     </LinearLayout>
-    
-    	
+
     <LinearLayout
-        android:layout_weight="0.25"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:gravity="center" >
-        <Button 
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
             android:id="@+id/favorites7"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
-        <Button 
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
+
+        <Button
             android:id="@+id/favorites8"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
-        <Button 
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
+
+        <Button
             android:id="@+id/favorites9"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
     </LinearLayout>
-    
-    	
+
     <LinearLayout
-        android:layout_weight="0.25"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:gravity="center" >
-        <Button 
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
             android:id="@+id/favorites10"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
-        <Button 
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
+
+        <Button
             android:id="@+id/favorites11"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
-        <Button 
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
+
+        <Button
             android:id="@+id/favorites12"
-            android:layout_weight="0.33"
-            android:layout_width = "0dp"
-            android:layout_height = "match_parent"/>
+            style="@style/FavoriteButtons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
     </LinearLayout>
+
 </LinearLayout>

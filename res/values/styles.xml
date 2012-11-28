@@ -18,6 +18,11 @@
         <item name="android:minHeight">40dip</item>
         <item name="android:minWidth">40dip</item>
     </style>
-
+    
+    <style name="FavoriteButtons">
+        <item name="android:background">@drawable/favorite_background</item>
+		<item name="android:layout_margin">2dip</item>	       
+    </style>
+    
 </resources>
 
