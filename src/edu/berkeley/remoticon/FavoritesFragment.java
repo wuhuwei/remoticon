@@ -81,8 +81,9 @@ public class FavoritesFragment extends Fragment {
 	{
 		Button b = favButtons.get(i);
 		if (parent.favChannels.get(i) != null && parent.favChannels.get(i) != -1)
-		{
-		    String styledText = "<big> <font color='#008000'>"
+		{	
+			b.setBackgroundResource(R.drawable.button_background);
+		    String styledText = "<big> <font color='#ffffff'>"
 		            + parent.favChannels.get(i) + "</font> </big>" + "<br />"
 		            + "<small>" + parent.favLabels.get(i) + "</small>";
 		    b.setText(Html.fromHtml(styledText));

@@ -115,6 +115,7 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 			favChannels.add(currChannel);
 			favLabels.add(currLabel);
 		}
+		Log.e("foo", favChannels.toString());
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

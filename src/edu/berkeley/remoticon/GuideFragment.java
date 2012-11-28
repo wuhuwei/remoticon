@@ -246,9 +246,12 @@ public class GuideFragment extends Fragment {
 			TVGuideEntry e = items.get(position);
 			Channel c = e.getChannel();
 			holder.channelAbbrev.setText(c.getAbbr());
-
+			
+			
 			if (c.getNumber() != 0) {
 				holder.channelNum.setText(Integer.toString(c.getNumber()));
+				holder.channelAbbrev.setOnClickListener(new ChannelClickListener(c.getAbbr(), c.getNumber()));
+				holder.channelNum.setOnClickListener(new ChannelClickListener(c.getAbbr(), c.getNumber()));
 			}
 			ArrayList<Program> shows = e.getShows();
 
@@ -308,7 +311,19 @@ public class GuideFragment extends Fragment {
 					.getBackStackEntryCount());
 		}
 	}
-
+	
+	private class ChannelClickListener implements OnClickListener {
+		private String name;
+		private int number;
+		public ChannelClickListener(String name, int number) {
+			this.name = name;
+			this.number = number;
+		}
+		
+		public void onClick(View v) {
+			activity.promptAddFavorite(name, number);
+		}
+	}
 	private class ListingRowHolder {
 		public TextView channelAbbrev;
 		public TextView channelNum;
