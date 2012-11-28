@@ -450,4 +450,24 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 	public void EditFavoriteCancel(DialogFragment dialog) {
 		selectedFavorite = -1;
 	}
+	
+	public String getChannelInfo(int channel, String time)
+	{
+		return "";
+	}
+	
+	//History Management
+	public void addChannelToHistory(int channel)
+	{
+		String channelInfo = getChannelInfo(channel, "currenttimeinwhateverformat");
+		addChannelToHistoryWithInfo(channel, channelInfo);
+	}
+	
+	public void addChannelToHistoryWithInfo(int channel, String info)
+	{
+		
+	}
+	
+	
+	
 }
