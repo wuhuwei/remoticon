@@ -178,6 +178,22 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
     }
 
 	
+	public void onBackPressed()
+	{
+		if (getFragmentManager().getBackStackEntryCount() > 0)
+		{
+			getFragmentManager().popBackStackImmediate();
+		}
+		else if (getActionBar().getSelectedNavigationIndex() != 0)
+		{
+			getActionBar().selectTab(getActionBar().getTabAt(0));
+		}
+		else
+		{
+			super.onBackPressed();
+		}
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -337,7 +353,7 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 
         Tab tab = actionBar.newTab().setText(REMOTE_TAB.toUpperCase()).setTabListener(new NavTabListener<RemoteFragment>(this, REMOTE_TAB, RemoteFragment.class));
         actionBar.addTab(tab);
-
+        
         tab = actionBar.newTab().setText(GUIDE_TAB.toUpperCase()).setTabListener(new NavTabListener<GuideFragment>(this, GUIDE_TAB, GuideFragment.class));
         actionBar.addTab(tab);
 

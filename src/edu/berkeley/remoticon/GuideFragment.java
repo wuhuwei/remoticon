@@ -293,7 +293,6 @@ public class GuideFragment extends Fragment {
 
 		public void onClick(View v) {
 			Fragment showDetails = new ShowFragment(channel, show);
-
 			FragmentTransaction ft = activity.getFragmentManager()
 					.beginTransaction();
 
@@ -303,10 +302,11 @@ public class GuideFragment extends Fragment {
 			// ft.add(R.id.realtabcontent, showDetails, "showDetails");
 			ft.replace(R.id.realtabcontent, showDetails);
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			
 			ft.addToBackStack(null);
 
 			ft.commit();
-
+			
 			System.out.println(activity.getFragmentManager()
 					.getBackStackEntryCount());
 		}
