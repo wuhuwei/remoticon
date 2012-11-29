@@ -30,4 +30,8 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="history_channel">Channel</string>
+    <string name="history_info">Information</string>
+    <string name="history_time">Time</string>
+    <string name="clear_history">Clear History</string>
 </resources>
