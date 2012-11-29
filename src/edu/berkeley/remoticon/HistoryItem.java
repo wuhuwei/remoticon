@@ -6,7 +6,7 @@ public class HistoryItem {
 	private long id;
 	private int channel;
 	private String name;
-	private Timestamp time;
+	private long time;
 
 	  public long getId() {
 	    return id;
@@ -33,12 +33,12 @@ public class HistoryItem {
 		  this.name = n;
 	  }
 	  
-	  public Timestamp getTime()
+	  public long getTime()
 	  {
 		  return this.time;
 	  }
 	  
-	  public void setTime(Timestamp t)
+	  public void setTime(long t)
 	  {
 		  this.time = t;
 	  }
@@ -46,6 +46,6 @@ public class HistoryItem {
 	  // Will be used by the ArrayAdapter in the ListView
 	  @Override
 	  public String toString() {
-	    return time.toString() + "," + name +"," + time.toString();
+	    return ""+time + "," + name +"," + time;
 	  }
 	} 

@@ -1,7 +1,10 @@
 package edu.berkeley.remoticon;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.w3c.dom.Comment;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,8 +22,8 @@ public class HistoryItemDataSource {
       SQLiteHelper.COLUMN_HISTORY_NAME,
       SQLiteHelper.COLUMN_HISTORY_TIME};
 
-  public CommentsDataSource(Context context) {
-    dbHelper = new MySQLiteHelper(context);
+  public HistoryItemDataSource(Context context) {
+    dbHelper = new SQLiteHelper(context);
   }
 
   public void open() throws SQLException {
@@ -31,48 +34,52 @@ public class HistoryItemDataSource {
     dbHelper.close();
   }
 
-  public Comment createComment(String comment) {
+  public HistoryItem createHistoryItem(int channel, String name, long time) {
     ContentValues values = new ContentValues();
-    values.put(MySQLiteHelper.COLUMN_COMMENT, comment);
-    long insertId = database.insert(MySQLiteHelper.TABLE_COMMENTS, null,
+    values.put(SQLiteHelper.COLUMN_HISTORY_CHANNEL, channel);
+    values.put(SQLiteHelper.COLUMN_HISTORY_NAME, name);
+    values.put(SQLiteHelper.COLUMN_HISTORY_TIME, time);
+    long insertId = database.insert(SQLiteHelper.TABLE_HISTORY, null,
         values);
-    Cursor cursor = database.query(MySQLiteHelper.TABLE_COMMENTS,
-        allColumns, MySQLiteHelper.COLUMN_ID + " = " + insertId, null,
+    Cursor cursor = database.query(SQLiteHelper.TABLE_HISTORY,
+        allColumns, SQLiteHelper.COLUMN_ID + " = " + insertId, null,
         null, null, null);
     cursor.moveToFirst();
-    Comment newComment = cursorToComment(cursor);
+    HistoryItem newHistoryItem = cursorToHistoryItem(cursor);
     cursor.close();
-    return newComment;
+    return newHistoryItem;
   }
 
-  public void deleteComment(Comment comment) {
-    long id = comment.getId();
-    System.out.println("Comment deleted with id: " + id);
-    database.delete(MySQLiteHelper.TABLE_COMMENTS, MySQLiteHelper.COLUMN_ID
+  public void deleteHistoryItem(HistoryItem hi) {
+    long id = hi.getId();
+    System.out.println("HistoryItem deleted with id: " + id);
+    database.delete(SQLiteHelper.TABLE_HISTORY, SQLiteHelper.COLUMN_ID
         + " = " + id, null);
   }
 
-  public List<Comment> getAllComments() {
-    List<Comment> comments = new ArrayList<Comment>();
+  public List<HistoryItem> getAllHistoryItems() {
+    List<HistoryItem> historyItems = new ArrayList<HistoryItem>();
 
-    Cursor cursor = database.query(MySQLiteHelper.TABLE_COMMENTS,
+    Cursor cursor = database.query(SQLiteHelper.TABLE_HISTORY,
         allColumns, null, null, null, null, null);
 
     cursor.moveToFirst();
     while (!cursor.isAfterLast()) {
-      Comment comment = cursorToComment(cursor);
-      comments.add(comment);
+      HistoryItem hi = cursorToHistoryItem(cursor);
+      historyItems.add(hi);
       cursor.moveToNext();
     }
     // Make sure to close the cursor
     cursor.close();
-    return comments;
+    return historyItems;
   }
 
-  private Comment cursorToComment(Cursor cursor) {
-    Comment comment = new Comment();
-    comment.setId(cursor.getLong(0));
-    comment.setComment(cursor.getString(1));
-    return comment;
+  private HistoryItem cursorToHistoryItem(Cursor cursor) {
+    HistoryItem hi = new HistoryItem();
+    hi.setId(cursor.getLong(0));
+    hi.setChannel(cursor.getInt(1));
+    hi.setName(cursor.getString(2));
+    hi.setTime(cursor.getLong(3));
+    return hi;
   }
 }

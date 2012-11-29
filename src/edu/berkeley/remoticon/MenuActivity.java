@@ -1,7 +1,9 @@
 package edu.berkeley.remoticon;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -52,6 +54,10 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 	public int selectedFavorite = -1;
 	ArrayList<Integer> favChannels;
 	ArrayList<String> favLabels;
+	
+	//History Management
+	HistoryItemDataSource historySource;
+	List<HistoryItem> allHistoryItems;
 
 
 	
@@ -115,7 +121,12 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 			favChannels.add(currChannel);
 			favLabels.add(currLabel);
 		}
-		Log.e("foo", favChannels.toString());
+		
+		//setup history
+		historySource = new HistoryItemDataSource(this);
+	    historySource.open();
+	    allHistoryItems = historySource.getAllHistoryItems();
+	    Log.e(TAG, "read " + allHistoryItems.size() + " history items");
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -357,7 +368,7 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
     	selectedFavorite = -1;
     	for (int i = 0; i < numChannels; ++i)
     	{
-    		if (favChannels.get(i) != -1)
+    		if (favChannels.get(i) == -1)
     		{
     			selectedFavorite = i;
     		}
@@ -380,8 +391,20 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 	
 	public void goToChannel(int channel)
 	{
+		goToChannelInfo(channel, "");
+	}
+	public void goToChannelInfo(int channel, String info)
+	{
 		String signal = "";
-		Log.e(TAG, "going to channel");
+		Log.e(TAG, "going to channel " + channel + " with info " + info);
+		if (info != "" && info != null)
+		{
+			addChannelToHistoryWithInfo(channel, info);
+		}
+		else
+		{
+			addChannelToHistory(channel);
+		}
 		while (channel > 0)
 		{
 			int currDigit = channel % 10;
@@ -395,7 +418,6 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
     	System.out.println(code);
     	if (CM.getBTService().getState() == BluetoothService.STATE_CONNECTED)
     	{
-    		System.out.println("am i here?");
     		CM.getBTService().write(formatIRCode(code).getBytes());
     	}
     	else
@@ -452,23 +474,36 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 		selectedFavorite = -1;
 	}
 	
-	public String getChannelInfo(int channel, String time)
+	public String getChannelInfo(int channel, long time)
 	{
-		return "";
+		return "Unknown Channel";
 	}
 	
 	//History Management
 	public void addChannelToHistory(int channel)
 	{
-		String channelInfo = getChannelInfo(channel, "currenttimeinwhateverformat");
+	    Date d = new Date();
+	    long time = d.getTime();
+		String channelInfo = getChannelInfo(channel, time);
 		addChannelToHistoryWithInfo(channel, channelInfo);
 	}
 	
 	public void addChannelToHistoryWithInfo(int channel, String info)
 	{
-		
+	    Date d = new Date();
+	    long time = d.getTime();
+	    Log.e(TAG, "Creating history item with channel " + channel + " and info " + info);
+	    HistoryItem newHistory = historySource.createHistoryItem(channel, info, time);
+	    allHistoryItems.add(newHistory);
 	}
 	
-	
-	
+	public void clearHistory()
+	{
+      for (int i = 0; i < allHistoryItems.size(); ++i)
+      {
+        HistoryItem hi = allHistoryItems.get(i);
+        historySource.deleteHistoryItem(hi);
+      }
+      allHistoryItems.clear();
+	}	
 }

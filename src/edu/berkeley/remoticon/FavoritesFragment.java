@@ -117,7 +117,7 @@ public class FavoritesFragment extends Fragment {
 		public void onClick(View v) {
 			if (parent.favChannels.get(myInd) != -1)
 			{
-				parent.goToChannel(parent.favChannels.get(myInd));
+				parent.goToChannelInfo(parent.favChannels.get(myInd), parent.favLabels.get(myInd));
 			}
 			else
 			{
