@@ -396,7 +396,8 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
     	if (CM.getBTService().getState() == BluetoothService.STATE_CONNECTED)
     	{
     		System.out.println("am i here?");
-    		CM.getBTService().write(formatIRCode(code).getBytes());
+    		//CM.getBTService().write(formatIRCode(code).getBytes());
+    		CM.getBTService().write(code.getBytes());
     	}
     	else
     	{

@@ -67,16 +67,22 @@ public class RemoteFragment extends Fragment {
 
 		if (activity != null) {
 			powerBtn = (Button) activity.findViewById(R.id.powerBtn);
-			powerBtn.setOnClickListener(new RemoteBtnClickListener("power"));
 			channelUp = (ImageView) activity.findViewById(R.id.channelUp);
-			channelUp.setOnClickListener(new RemoteBtnClickListener("channelUp"));
 			channelDown = (ImageView) activity.findViewById(R.id.channelDown);
-			channelDown.setOnClickListener(new RemoteBtnClickListener("channelDown"));
-
 			volumeUp = (Button) activity.findViewById(R.id.volumeUp);
-			volumeUp.setOnClickListener(new RemoteBtnClickListener("volumeUp"));
 			volumeDown = (Button) activity.findViewById(R.id.volumeDown);
-			volumeDown.setOnClickListener(new RemoteBtnClickListener("volumeDown"));
+			
+//			powerBtn.setOnClickListener(new RemoteBtnClickListener("power"));
+//			channelUp.setOnClickListener(new RemoteBtnClickListener("channelUp"));
+//			channelDown.setOnClickListener(new RemoteBtnClickListener("channelDown"));
+//			volumeUp.setOnClickListener(new RemoteBtnClickListener("volumeUp"));
+//			volumeDown.setOnClickListener(new RemoteBtnClickListener("volumeDown"));
+			
+			powerBtn.setOnClickListener(new RemoteBtnClickListener("P"));
+			channelUp.setOnClickListener(new RemoteBtnClickListener("CU"));
+			channelDown.setOnClickListener(new RemoteBtnClickListener("CD"));
+			volumeUp.setOnClickListener(new RemoteBtnClickListener("VU"));
+			volumeDown.setOnClickListener(new RemoteBtnClickListener("VD"));
 			
 			NumPadClickListener numPadListener = new NumPadClickListener();
 			btnOne = (Button) activity.findViewById(R.id.Button01);
@@ -123,11 +129,11 @@ public class RemoteFragment extends Fragment {
 		
 		@Override
 		public void onClick(View v) {
-			String signal = activity.remoteCodes.get(key);
+			//String signal = activity.remoteCodes.get(key);
 			//System.out.println(signal);
-			if(signal != null) {
-				activity.sendCode(signal);
-			}
+			//if(signal != null) {
+				activity.sendCode(key + ",");
+			//}
 			
 		}
 	}
@@ -135,12 +141,13 @@ public class RemoteFragment extends Fragment {
 	private class ChannelClickListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			String channel = (String) channelInput.getText();
+			String channel = channelInput.getText().toString();
 			String signal = "";
 			for(int i = 0; i < channel.length(); i++) {
-				signal += activity.remoteCodes.get(channel.charAt(i));
+				signal += channel.charAt(i);
 			}
-			activity.sendCode(signal);
+			activity.sendCode(signal + ",");
+			channelInput.setText("");
 			
 		}
 	}
