@@ -411,7 +411,6 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 	}
 	public void goToChannelInfo(int channel, String info)
 	{
-		String signal = "";
 		Log.e(TAG, "going to channel " + channel + " with info " + info);
 		if (info != "" && info != null)
 		{
@@ -421,13 +420,8 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 		{
 			addChannelToHistory(channel);
 		}
-		while (channel > 0)
-		{
-			int currDigit = channel % 10;
-			signal = remoteCodes.get(("" + currDigit)) + signal;
-			channel = channel / 10;
-		}
-		sendCode(signal);
+		
+		sendCode(channel + ",");
 	}
     public void sendCode(String code)
     {
