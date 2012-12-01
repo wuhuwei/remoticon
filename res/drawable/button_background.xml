@@ -11,7 +11,7 @@
                 android:endColor="#fff"
                 android:startColor="#1d436e" />
 			<solid android:color="#1d436e" />
-            <corners android:radius="10dp" />
+            <corners android:radius="8dp" />
         </shape>
     </item>
 
@@ -21,7 +21,7 @@
         <shape  android:shape="rectangle">
 
         <solid android:color="#4297f6" />
-        <corners android:radius="7dp" />
+        <corners android:radius="5dp" />
 
 
         </shape>

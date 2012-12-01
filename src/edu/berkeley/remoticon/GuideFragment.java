@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -245,14 +246,7 @@ public class GuideFragment extends Fragment {
 
 			TVGuideEntry e = items.get(position);
 			Channel c = e.getChannel();
-			holder.channelAbbrev.setText(c.getAbbr());
 			
-			
-			if (c.getNumber() != 0) {
-				holder.channelNum.setText(Integer.toString(c.getNumber()));
-				holder.channelAbbrev.setOnClickListener(new ChannelClickListener(c.getAbbr(), c.getNumber()));
-				holder.channelNum.setOnClickListener(new ChannelClickListener(c.getAbbr(), c.getNumber()));
-			}
 			ArrayList<Program> shows = e.getShows();
 
 			Program s1 = shows.get(0);
@@ -274,6 +268,15 @@ public class GuideFragment extends Fragment {
 				}
 				
 				holder.showLabels.get(1).setText(shows.get(1).getName());
+			}
+			
+			if (c.getNumber() != 0) {
+				holder.channelNum.setText(Integer.toString(c.getNumber()));
+				holder.channelAbbrev.setText(c.getAbbr());
+				holder.channelAbbrev.setOnClickListener(new ChannelClickListener(s1.getName(), c.getNumber()));
+				holder.channelNum.setOnClickListener(new ChannelClickListener(s1.getName(), c.getNumber()));
+				holder.channelAbbrev.setOnLongClickListener(new AddChannelFavoriteListener(c.getAbbr(), c.getNumber()));
+				holder.channelNum.setOnLongClickListener(new AddChannelFavoriteListener(c.getAbbr(), c.getNumber()));
 			}
 
 			return convertView;
@@ -313,16 +316,33 @@ public class GuideFragment extends Fragment {
 	}
 	
 	private class ChannelClickListener implements OnClickListener {
-		private String name;
-		private int number;
-		public ChannelClickListener(String name, int number) {
-			this.name = name;
-			this.number = number;
+		private String showName;
+		private int channelNumber;
+		public ChannelClickListener(String showName, int channelNumber) {
+			this.showName = showName;
+			this.channelNumber = channelNumber;
 		}
 		
 		public void onClick(View v) {
-			activity.promptAddFavorite(name, number);
+			activity.goToChannelInfo(channelNumber, showName);
 		}
+	}
+	
+	private class AddChannelFavoriteListener implements OnLongClickListener {
+		private String channelName;
+		private int channelNumber;
+		
+		public AddChannelFavoriteListener(String channelName, int channelNumber) {
+			this.channelName = channelName;
+			this.channelNumber = channelNumber;
+		}
+		
+		@Override
+		public boolean onLongClick(View v) {
+			activity.promptAddFavorite(channelName, channelNumber);
+			return true;
+		}
+		
 	}
 	private class ListingRowHolder {
 		public TextView channelAbbrev;

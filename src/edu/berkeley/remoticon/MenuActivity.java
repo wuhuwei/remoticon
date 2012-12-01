@@ -38,7 +38,7 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 	private final String REMOTE_TAB = "remote";
 	private final String GUIDE_TAB = "guide";
 	private final String FAVORITES_TAB = "favorites";
-	private final String EXPLORE_TAB = "explore";
+	private final String EXPLORE_TAB = "history";
 
 	private MenuItem btButton;
 	
@@ -312,10 +312,8 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 				ft.attach(preInitializedFragment);
 			} else {
 				mFragment = Fragment.instantiate(mActivity, mClass.getName());
-	            ft.add(R.id.realtabcontent, mFragment, mTag);
-	        }	
-			
-	      
+	            ft.replace(R.id.realtabcontent, mFragment);
+			}
 		}
 		
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {

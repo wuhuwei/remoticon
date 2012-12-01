@@ -9,7 +9,7 @@
         android:layout_width="70dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="5dp"
         android:orientation="vertical" >
 
         <TextView
@@ -43,7 +43,7 @@
             android:layout_gravity="center|clip_horizontal"
             android:layout_weight="0.5"
             android:text="TextView"
-            android:textSize="18dip" />
+            android:textSize="16dip" />
 
         <TextView
             android:id="@+id/show2_label"
@@ -52,7 +52,7 @@
             android:layout_gravity="center|clip_horizontal"
             android:layout_weight="0.5"
             android:text="TextView"
-            android:textSize="18dip" />
+            android:textSize="16dip" />
     </LinearLayout>
 
 </LinearLayout>

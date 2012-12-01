@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:paddingLeft="10dip"
     android:paddingRight="10dip"
-    android:paddingTop="20dip" >
+    android:paddingTop="20dip"
+    android:background="#ebf5fa">
 
     <TextView
         android:id="@+id/textView1"
@@ -24,11 +25,12 @@
 
         <Button
             android:id="@+id/bluetoothConnectionBtn"
+            style="@style/SetupButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20px"
-          	style="@style/SetupButtons"
+            android:minHeight="42dip"
             android:text="Connect to Remoticon" />
 
     <TextView
@@ -42,12 +44,13 @@
     
     <Button
         android:id="@+id/findTVBtn"
+        style="@style/SetupButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dip"
-        android:text="Find TV Device"
-       	style="@style/SetupButtons" />
+        android:text="Find TV Device" />
+
      <TextView
         android:id="@+id/tvSelectStatusText"
         android:layout_width="wrap_content"

@@ -1,6 +1,8 @@
 package edu.berkeley.remoticon;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -58,7 +60,7 @@ public class ShowFragment extends Fragment {
 		activity = (MenuActivity) getActivity();
 		airingsView = (ExpandableListView) activity.findViewById(R.id.airingsList);
 		showTitle = (TextView) activity.findViewById(R.id.showTitle);
-		showTitle.setText(show.getName() + " " + show.getId());
+		showTitle.setText(show.getName());
 
 		showDescription = (TextView) activity
 				.findViewById(R.id.showDescription);
@@ -152,7 +154,10 @@ public class ShowFragment extends Fragment {
 				
 			}
 			TextView airingTime = (TextView) convertView.findViewById(R.id.showTime);
-			airingTime.setText(airings.get(groupPosition).getAiringTime().toString());
+			Date time = airings.get(groupPosition).getAiringTime();
+			SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM dd, yyyy 'at' hh:mma");
+			
+			airingTime.setText(format.format(time));
 			return convertView;
 		}
 

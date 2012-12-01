@@ -143,8 +143,7 @@ public class RemoteFragment extends Fragment {
 		public void onClick(View v) {
 			String channel = channelInput.getText().toString();
 			activity.goToChannel(Integer.parseInt(channel));
-			channelInput.setText("");
-			
+			channelInput.setText("");		
 		}
 	}
 		
