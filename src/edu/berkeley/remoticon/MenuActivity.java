@@ -1,9 +1,13 @@
 package edu.berkeley.remoticon;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import edu.berkeley.remoticon.GuideFragment.ListingFetcher;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -27,7 +31,7 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-public class MenuActivity extends FragmentActivity implements FavoritesEditDialog.FavoritesEditListener{
+public class MenuActivity extends FragmentActivity implements FavoritesEditDialog.FavoritesEditListener, RetryGuideDialog.RetryGuideListener{
 	private String TAG = "MenuActivity";
 	private ConnectionManager CM;
 	private ConnectionListener CL;
@@ -307,24 +311,20 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 
 		
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			Fragment preInitializedFragment = mActivity.getFragmentManager().findFragmentByTag(mTag);
-			if(preInitializedFragment != null && preInitializedFragment.getClass() == mClass) {
-				ft.attach(preInitializedFragment);
-			} else {
-				mFragment = Fragment.instantiate(mActivity, mClass.getName());
-	            ft.replace(R.id.realtabcontent, mFragment);
-			}
+			if (mFragment == null) {
+                mFragment = Fragment.instantiate(mActivity, mClass.getName());
+                ft.add(android.R.id.content, mFragment, mTag);
+            } else {
+                ft.attach(mFragment);
+            }
+			
 		}
 		
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-			Fragment preInitializedFragment = (Fragment) mActivity
-					.getFragmentManager().findFragmentByTag(mTag);
-
-	        if (preInitializedFragment != null) {
-	            ft.detach(preInitializedFragment);
-	        } else if (mFragment != null) {
+			if (mFragment != null) {
 	            ft.detach(mFragment);
 	        }
+	        
 
 		}
 
@@ -459,7 +459,7 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
 		}
 		favLabels.set(selectedFavorite, label);
 		favChannels.set(selectedFavorite, channel);
-		
+		System.out.println((FavoritesFragment)getFragmentManager().findFragmentByTag(FAVORITES_TAB));
 		((FavoritesFragment)getFragmentManager().findFragmentByTag(FAVORITES_TAB)).setButtonText(selectedFavorite);
 		
 		selectedFavorite = -1;
@@ -515,5 +515,23 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
         historySource.deleteHistoryItem(hi);
       }
       allHistoryItems.clear();
+	}
+
+	@Override
+	public void retry(DialogFragment dialog) {
+		Log.e("foo", "wassuuuup");
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment oldGuide = getFragmentManager().findFragmentByTag(GUIDE_TAB);
+		ft.remove(oldGuide);
+		GuideFragment f = new GuideFragment();
+		ft.add(R.id.realtabcontent, f, GUIDE_TAB);
+		ft.commit();
+		
+	}
+
+	@Override
+	public void cancel(DialogFragment dialog) {
+		// TODO Auto-generated method stub
+		
 	}	
 }

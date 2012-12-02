@@ -7,14 +7,14 @@
         android:id="@+id/history_item_channel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.15"
-        android:paddingLeft="20dp" />
+        android:layout_weight="0.2"
+    />
     <TextView
         android:id="@+id/history_item_info"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.55"
-        android:paddingLeft="50dp" />
+        android:layout_weight="0.5"
+    />
     <TextView
         android:id="@+id/history_item_time"
         android:layout_width="0dp"

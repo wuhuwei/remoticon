@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
@@ -113,6 +114,10 @@ public class GuideFragment extends Fragment {
 
 		// check if data has already been populated before making API call
 		if (listings == null || startTime == null) {
+			time1.setVisibility(View.INVISIBLE);
+			time2.setVisibility(View.INVISIBLE);
+			prevButton.setVisibility(View.INVISIBLE);
+			nextButton.setVisibility(View.INVISIBLE);
 			ListingFetcher task = new ListingFetcher();
 
 			Date now = new Date();
@@ -129,7 +134,7 @@ public class GuideFragment extends Fragment {
 
 	}
 
-	private class ListingFetcher extends
+	public class ListingFetcher extends
 			AsyncTask<String, Void, ArrayList<TVGuideEntry>> {
 
 		@Override
@@ -141,10 +146,7 @@ public class GuideFragment extends Fragment {
 		@Override
 		protected ArrayList<TVGuideEntry> doInBackground(String... queryInfo) {
 
-			time1.setVisibility(View.INVISIBLE);
-			time2.setVisibility(View.INVISIBLE);
-			prevButton.setVisibility(View.INVISIBLE);
-			nextButton.setVisibility(View.INVISIBLE);
+			
 
 			SimpleDateFormat sdf = new SimpleDateFormat(
 					"yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -161,7 +163,6 @@ public class GuideFragment extends Fragment {
 		@Override
 		protected void onPostExecute(ArrayList<TVGuideEntry> result) {
 			listings = result;
-			loadingBar.dismiss();
 			fillGuideTable();
 		}
 	}
@@ -189,21 +190,27 @@ public class GuideFragment extends Fragment {
 	 * LayoutParams.WRAP_CONTENT)); } }
 	 */
 	private void fillGuideTable() {
-
-		Calendar calendar;
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-		time1.setText(timeFormat.format(startTime));
-		calendar = Calendar.getInstance();
-		calendar.setTime(startTime);
-		calendar.add(Calendar.MINUTE, 30);
-		time2.setText(timeFormat.format(calendar.getTime()));
-		time1.setVisibility(View.VISIBLE);
-		time2.setVisibility(View.VISIBLE);
-		prevButton.setVisibility(View.VISIBLE);
-		nextButton.setVisibility(View.VISIBLE);
-		loadingBar.hide();
-		guideAdapter = new GuideItemAdapter(activity, 0, listings, startTime);
-		guide.setAdapter(guideAdapter);
+		if(listings == null) {
+			
+			DialogFragment retryFragment = new RetryGuideDialog();
+			retryFragment.show(getFragmentManager(), "retry");
+		} else {
+			Calendar calendar;
+			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+			time1.setText(timeFormat.format(startTime));
+			calendar = Calendar.getInstance();
+			calendar.setTime(startTime);
+			calendar.add(Calendar.MINUTE, 30);
+			time2.setText(timeFormat.format(calendar.getTime()));
+			time1.setVisibility(View.VISIBLE);
+			time2.setVisibility(View.VISIBLE);
+			prevButton.setVisibility(View.VISIBLE);
+			nextButton.setVisibility(View.VISIBLE);
+			guideAdapter = new GuideItemAdapter(activity, 0, listings, startTime);
+			guide.setAdapter(guideAdapter);
+		}
+		loadingBar.dismiss();
+		
 	}
 
 	private class GuideItemAdapter extends ArrayAdapter<TVGuideEntry> {
@@ -299,19 +306,12 @@ public class GuideFragment extends Fragment {
 			FragmentTransaction ft = activity.getFragmentManager()
 					.beginTransaction();
 
-			// Fragment current =
-			// activity.getFragmentManager().findFragmentByTag("guide");
-			// ft.detach(current);
-			// ft.add(R.id.realtabcontent, showDetails, "showDetails");
-			ft.replace(R.id.realtabcontent, showDetails);
-			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			
+			Fragment current = activity.getFragmentManager().findFragmentByTag(
+					"guide");
+			ft.detach(current);
+			ft.add(R.id.realtabcontent, showDetails, "showDetails");
 			ft.addToBackStack(null);
-
 			ft.commit();
-			
-			System.out.println(activity.getFragmentManager()
-					.getBackStackEntryCount());
 		}
 	}
 	

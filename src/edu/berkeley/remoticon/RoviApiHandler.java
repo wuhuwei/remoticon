@@ -21,7 +21,6 @@ import org.json.simple.JSONValue;
 import android.util.Log;
 
 public class RoviApiHandler {
-	// This is really secure - Justin
 	private final String API_KEY = "6gckp829sp22xcn3puqqsbrc";
 	private final String SECRET = "ZpKXWqxauS";
 
@@ -41,7 +40,6 @@ public class RoviApiHandler {
 			}
 			return hashtext;
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -78,72 +76,10 @@ public class RoviApiHandler {
 			JSONObject response = readResponse(in);
 			JSONObject services = (JSONObject)((JSONObject)response.get("ServicesResult")).get("Services");
 			return (JSONArray)services.get("Service");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		} 
-		/*
-		 * try {
-		 * 
-		 * 
-		 * SOAPMessage message = MessageFactory.newInstance().createMessage();
-		 * SOAPPart soapPart = message.getSOAPPart(); SOAPEnvelope soapEnvelope
-		 * = soapPart.getEnvelope();
-		 * soapEnvelope.addAttribute(soapEnvelope.createName("xmlns:typ"),
-		 * "http://api.rovicorp.com/v9/common/types");
-		 * soapEnvelope.addAttribute(soapEnvelope.createName("xmlns:lis"),
-		 * "http://api.rovicorp.com/v9/listings");
-		 * 
-		 * SOAPHeader soapHeader = soapEnvelope.getHeader();
-		 * 
-		 * SOAPHeaderElement authHeader =
-		 * soapHeader.addHeaderElement(soapEnvelope.createName("AuthHeader",
-		 * "typ", "http://api.rovicorp.com/v9/common/types")); SOAPElement
-		 * usernameElement = authHeader.addChildElement("UserName", "typ");
-		 * usernameElement.setTextContent(USERNAME); SOAPElement passwordElement
-		 * = authHeader.addChildElement("Password", "typ");
-		 * passwordElement.setTextContent(PASSWORD);
-		 * 
-		 * SOAPBody soapBody = soapEnvelope.getBody(); SOAPElement
-		 * servicesElement =
-		 * soapBody.addBodyElement(soapEnvelope.createName("GetServices", "lis",
-		 * "http://api.rovicorp.com/v9/listings")); SOAPElement requestElement =
-		 * servicesElement.addChildElement("Request", "lis");
-		 * requestElement.addChildElement("Locale",
-		 * "lis").setTextContent("en-US"); SOAPElement searchElement =
-		 * requestElement.addChildElement("ServiceSearch", "lis");
-		 * searchElement.addChildElement("PostalCode",
-		 * "lis").setTextContent("90210");
-		 * searchElement.addChildElement("CountryCode",
-		 * "lis").setTextContent("US");
-		 * 
-		 * 
-		 * 
-		 * ByteArrayOutputStream output = new ByteArrayOutputStream();
-		 * message.writeTo(output); String xmlString = new
-		 * String(output.toByteArray());
-		 * 
-		 * URL url = new
-		 * URL("http://api.rovicorp.com/v9/listingsservice.asmx?apikey=" +
-		 * API_KEY); HttpURLConnection connection = (HttpURLConnection)
-		 * url.openConnection(); connection.setRequestProperty("Content-Length",
-		 * String.valueOf(xmlString.length()));
-		 * connection.setRequestProperty("Content-Type", "text/xml");
-		 * connection.setRequestProperty("Connection", "Close");
-		 * connection.setRequestProperty("SoapAction", "");
-		 * connection.setDoOutput(true);
-		 * 
-		 * OutputStreamWriter wr = new
-		 * OutputStreamWriter(connection.getOutputStream());
-		 * wr.write(xmlString); wr.flush();
-		 * 
-		 * BufferedReader rd = new BufferedReader(new
-		 * InputStreamReader(connection.getInputStream()));
-		 * 
-		 * } catch (Exception e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-
 	}
 
 	public ArrayList<TVGuideEntry> getListings(String serviceID, String startTime) {
