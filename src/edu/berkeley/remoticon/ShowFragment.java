@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import edu.berkeley.remoticon.GuideFragment.ListingFetcher;
+
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,7 +33,11 @@ public class ShowFragment extends Fragment {
 	TextView networkTitle;
 	TextView showDescription;
 	ImageView showImage;
+	TextView upcomingAirings;
 	ExpandableListView airingsView;
+	
+	TextView disconnectedMsg;
+	Button retryButton;
 	
 	ProgressDialog loader;
 	
@@ -73,6 +81,22 @@ public class ShowFragment extends Fragment {
 		showImage = (ImageView) activity.findViewById(R.id.showImage);
 		showImage.setVisibility(View.GONE);
 		
+		upcomingAirings = (TextView) activity.findViewById(R.id.upcomingAirings);
+		
+		disconnectedMsg = (TextView) activity.findViewById(R.id.disconnectedMsg);
+		retryButton = (Button) activity.findViewById(R.id.retryButton);
+		retryButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ShowInfoFetcher task = new ShowInfoFetcher();
+				task.execute(new String[] { "76550", Integer.toString(show.getId()) });
+			}
+			
+		});
+		disconnectedMsg.setVisibility(View.GONE);
+		retryButton.setVisibility(View.GONE);
+		
 		loader = new ProgressDialog(activity);
 
 		ShowInfoFetcher task = new ShowInfoFetcher();
@@ -97,10 +121,21 @@ public class ShowFragment extends Fragment {
 	
 	private void populateView() {
 		if(info != null) {
+			showTitle.setVisibility(View.VISIBLE);
+			networkTitle.setVisibility(View.VISIBLE);
+			upcomingAirings.setVisibility(View.VISIBLE);
+			disconnectedMsg.setVisibility(View.GONE);
+			retryButton.setVisibility(View.GONE);
 			showDescription.setText(info.getDescription());
 			showDescription.setVisibility(View.VISIBLE);
-			
 			airingsView.setAdapter(new NextAiringsListAdapter(activity, info.getAirings()));
+		} else {
+			showTitle.setVisibility(View.GONE);
+			networkTitle.setVisibility(View.GONE);
+			upcomingAirings.setVisibility(View.GONE);
+			disconnectedMsg.setVisibility(View.VISIBLE);
+			retryButton.setVisibility(View.VISIBLE);
+			
 		}
 		loader.dismiss();
 	}

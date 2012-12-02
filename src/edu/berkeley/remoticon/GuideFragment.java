@@ -46,7 +46,10 @@ public class GuideFragment extends Fragment {
 	TextView time2;
 	Button nextButton;
 	Button prevButton;
-
+	
+	TextView disconnectedMsg;
+	Button retryButton;
+	
 	ProgressDialog loadingBar;
 
 	@Override
@@ -90,8 +93,9 @@ public class GuideFragment extends Fragment {
 				ListingFetcher task = new ListingFetcher();
 				calendar.setTime(startTime);
 				calendar.add(Calendar.HOUR, -1);
+				startTime = calendar.getTime();
 				task.execute(new String[] { "76550",
-						roundedHalfHourFormat.format(calendar.getTime()) });
+						roundedHalfHourFormat.format(startTime) });
 			}
 		});
 
@@ -100,10 +104,26 @@ public class GuideFragment extends Fragment {
 				ListingFetcher task = new ListingFetcher();
 				calendar.setTime(startTime);
 				calendar.add(Calendar.HOUR, 1);
+				startTime = calendar.getTime();
 				task.execute(new String[] { "76550",
-						roundedHalfHourFormat.format(calendar.getTime()) });
+						roundedHalfHourFormat.format(startTime) });
 			}
 		});
+		
+		disconnectedMsg = (TextView) activity.findViewById(R.id.disconnectedMsg);
+		retryButton = (Button) activity.findViewById(R.id.retryButton);
+		retryButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ListingFetcher refetchGuide = new ListingFetcher();
+				refetchGuide.execute(new String[] {"76550", roundedHalfHourFormat.format(startTime)});
+			}
+			
+		});
+		disconnectedMsg.setVisibility(View.GONE);
+		retryButton.setVisibility(View.GONE);
+		
 
 		roundedHalfHourFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:00'Z'");
 		calendar = Calendar.getInstance();
@@ -114,10 +134,10 @@ public class GuideFragment extends Fragment {
 
 		// check if data has already been populated before making API call
 		if (listings == null || startTime == null) {
-			time1.setVisibility(View.INVISIBLE);
-			time2.setVisibility(View.INVISIBLE);
-			prevButton.setVisibility(View.INVISIBLE);
-			nextButton.setVisibility(View.INVISIBLE);
+			time1.setVisibility(View.GONE);
+			time2.setVisibility(View.GONE);
+			prevButton.setVisibility(View.GONE);
+			nextButton.setVisibility(View.GONE);
 			ListingFetcher task = new ListingFetcher();
 
 			Date now = new Date();
@@ -191,9 +211,13 @@ public class GuideFragment extends Fragment {
 	 */
 	private void fillGuideTable() {
 		if(listings == null) {
-			
-			DialogFragment retryFragment = new RetryGuideDialog();
-			retryFragment.show(getFragmentManager(), "retry");
+			disconnectedMsg.setVisibility(View.VISIBLE);
+			retryButton.setVisibility(View.VISIBLE);
+			time1.setVisibility(View.GONE);
+			time2.setVisibility(View.GONE);
+			prevButton.setVisibility(View.GONE);
+			nextButton.setVisibility(View.GONE);
+			guide.setVisibility(View.GONE);
 		} else {
 			Calendar calendar;
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -206,8 +230,11 @@ public class GuideFragment extends Fragment {
 			time2.setVisibility(View.VISIBLE);
 			prevButton.setVisibility(View.VISIBLE);
 			nextButton.setVisibility(View.VISIBLE);
+			retryButton.setVisibility(View.GONE);
+			disconnectedMsg.setVisibility(View.GONE);
 			guideAdapter = new GuideItemAdapter(activity, 0, listings, startTime);
 			guide.setAdapter(guideAdapter);
+			guide.setVisibility(View.VISIBLE);
 		}
 		loadingBar.dismiss();
 		
