@@ -14,21 +14,22 @@
 
         <Button
             android:id="@+id/favorites1"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
+            
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
 
         <Button
             android:id="@+id/favorites2"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
 
         <Button
             android:id="@+id/favorites3"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
@@ -43,21 +44,21 @@
 
         <Button
             android:id="@+id/favorites4"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
 
         <Button
             android:id="@+id/favorites5"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
 
         <Button
             android:id="@+id/favorites6"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
@@ -72,21 +73,21 @@
 
         <Button
             android:id="@+id/favorites7"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
 
         <Button
             android:id="@+id/favorites8"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
 
         <Button
             android:id="@+id/favorites9"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
@@ -101,21 +102,21 @@
 
         <Button
             android:id="@+id/favorites10"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
 
         <Button
             android:id="@+id/favorites11"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />
 
         <Button
             android:id="@+id/favorites12"
-            style="@style/FavoriteButtons"
+            android:background="@drawable/favorite_empty_background"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.33" />

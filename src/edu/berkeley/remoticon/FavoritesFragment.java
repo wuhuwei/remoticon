@@ -82,7 +82,7 @@ public class FavoritesFragment extends Fragment {
 		Button b = favButtons.get(i);
 		if (parent.favChannels.get(i) != null && parent.favChannels.get(i) != -1)
 		{	
-			b.setBackgroundResource(R.drawable.button_background);
+			b.setBackgroundResource(R.drawable.favorite_filled_background);
 		    String styledText = "<big> <font color='#ffffff'>"
 		            + parent.favChannels.get(i) + "</font> </big>" + "<br />"
 		            + "<small>" + parent.favLabels.get(i) + "</small>";
@@ -90,6 +90,7 @@ public class FavoritesFragment extends Fragment {
 		}
 		else
 		{
+			b.setBackgroundResource(R.drawable.favorite_empty_background);
 			b.setText("[Tap to Add]");
 		}
 	}
