@@ -16,14 +16,16 @@
 
         <Button
             android:id="@+id/powerBtn"
-            style="@style/ChannelNumButtons"
+            style="@style/SetupButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/favorite_filled_background"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
             android:text="Power"
-            android:textSize="16dip" />
+            android:textSize="16dip"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -72,6 +74,7 @@
 
                     <Button
                         android:id="@+id/Button01"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -79,6 +82,7 @@
 
                     <Button
                         android:id="@+id/Button02"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -86,6 +90,7 @@
 
                     <Button
                         android:id="@+id/Button03"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -99,6 +104,7 @@
 
                     <Button
                         android:id="@+id/Button04"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -106,6 +112,7 @@
 
                     <Button
                         android:id="@+id/Button05"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -113,6 +120,7 @@
 
                     <Button
                         android:id="@+id/Button06"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -126,6 +134,7 @@
 
                     <Button
                         android:id="@+id/Button07"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -133,6 +142,7 @@
 
                     <Button
                         android:id="@+id/Button08"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -140,6 +150,7 @@
 
                     <Button
                         android:id="@+id/Button09"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -152,6 +163,7 @@
 
                     <Button
                         android:id="@+id/Button00"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -162,6 +174,7 @@
 
                     <Button
                         android:id="@+id/enterBtn"
+                        android:background="@drawable/favorite_filled_background"
                         style="@style/ChannelNumButtons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -187,6 +200,7 @@
 
         <Button
             android:id="@+id/volumeUp"
+            android:background="@drawable/favorite_filled_background"
             style="@style/SetupButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -195,6 +209,7 @@
 
         <Button
             android:id="@+id/volumeDown"
+            android:background="@drawable/favorite_filled_background"
             style="@style/SetupButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
