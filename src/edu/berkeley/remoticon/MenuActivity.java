@@ -1,13 +1,9 @@
 package edu.berkeley.remoticon;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import edu.berkeley.remoticon.GuideFragment.ListingFetcher;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -31,7 +27,7 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-public class MenuActivity extends FragmentActivity implements FavoritesEditDialog.FavoritesEditListener, RetryGuideDialog.RetryGuideListener{
+public class MenuActivity extends FragmentActivity implements FavoritesEditDialog.FavoritesEditListener{
 	private String TAG = "MenuActivity";
 	private ConnectionManager CM;
 	private ConnectionListener CL;
@@ -517,21 +513,5 @@ public class MenuActivity extends FragmentActivity implements FavoritesEditDialo
       allHistoryItems.clear();
 	}
 
-	@Override
-	public void retry(DialogFragment dialog) {
-		Log.e("foo", "wassuuuup");
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		Fragment oldGuide = getFragmentManager().findFragmentByTag(GUIDE_TAB);
-		ft.remove(oldGuide);
-		GuideFragment f = new GuideFragment();
-		ft.add(R.id.realtabcontent, f, GUIDE_TAB);
-		ft.commit();
-		
-	}
 
-	@Override
-	public void cancel(DialogFragment dialog) {
-		// TODO Auto-generated method stub
-		
-	}	
 }

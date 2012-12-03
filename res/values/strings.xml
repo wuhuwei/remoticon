@@ -34,4 +34,7 @@
     <string name="history_info">Information</string>
     <string name="history_time">Time</string>
     <string name="clear_history">Clear History</string>
+    
+    <string name="retry">Retry</string>
+    <string name="disconnected_msg">Sorry, the guide is currently unavailable right now. Please make sure you have internet connectivity.</string>
 </resources>
